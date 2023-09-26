@@ -1,0 +1,12 @@
+Package: IPBES.R
+Type: Package
+Title: Concise Summary of What the Package Does
+Version: 1.0
+Date: 2023-09-26
+Author: Rainer M. Krug
+Maintainer: Rainer M. Krug <Rainer@krugs.de>
+Description: More about what it does (maybe more than one line).
+License: GPL (>= 2)
+Suggests: tinytest
+Encoding: UTF-8
+RoxygenNote: 7.2.3

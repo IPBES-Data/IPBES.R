@@ -1,0 +1,5 @@
+.length_interceptlinters: linters_with_defaults(
+    line_length_linter(120), 
+    commented_code_linter = NULL,
+    indentation_linter(indent = 4L, hanging_indent_style = “tidy”, assignment_as_infix = TRUE)
+  )
