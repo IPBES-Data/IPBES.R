@@ -1,12 +1,23 @@
 Package: IPBES.R
 Type: Package
-Title: Concise Summary of What the Package Does
-Version: 1.0
+Title: Tool functions used by the Data and Knowledge Technical Support Unit of IPBES
+Version: 0.1
 Date: 2023-09-26
-Author: Rainer M. Krug
+Authors@R: 
+  c(person(given = "Rainer M.",
+           family = "Krug",
+           role = c("aut", "cre"),
+           email = "Rainer@krugs.de",
+           comment = c(ORCID = "0000-0001-8049-7069"))
+  )
 Maintainer: Rainer M. Krug <Rainer@krugs.de>
+URL: https://github.com/rkrug/IPBES.R
+BugReports: https://github.com/rkrug/IPBES.R/issues
 Description: More about what it does (maybe more than one line).
 License: GPL (>= 2)
+Imports:
+  dplyr,
+  openalexR
 Suggests: tinytest
 Encoding: UTF-8
 RoxygenNote: 7.2.3
