@@ -4,6 +4,7 @@
   "identifier": "IPBES.R",
   "description": "More about what it does (maybe more than one line).",
   "name": "IPBES.R: Tool functions used by the Data and Knowledge Technical Support Unit of IPBES",
+  "relatedLink": "https://rkrug.github.io/IPBES.R/",
   "codeRepository": "https://github.com/rkrug/IPBES.R",
   "issueTracker": "https://github.com/rkrug/IPBES.R/issues",
   "license": "https://spdx.org/licenses/GPL-2.0",
@@ -49,18 +50,6 @@
   "softwareRequirements": {
     "1": {
       "@type": "SoftwareApplication",
-      "identifier": "dplyr",
-      "name": "dplyr",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=dplyr"
-    },
-    "2": {
-      "@type": "SoftwareApplication",
       "identifier": "openalexR",
       "name": "openalexR",
       "provider": {
@@ -71,7 +60,68 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=openalexR"
     },
+    "2": {
+      "@type": "SoftwareApplication",
+      "identifier": "dplyr",
+      "name": "dplyr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=dplyr"
+    },
+    "3": {
+      "@type": "SoftwareApplication",
+      "identifier": "writexl",
+      "name": "writexl",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=writexl"
+    },
+    "4": {
+      "@type": "SoftwareApplication",
+      "identifier": "tidygraph",
+      "name": "tidygraph",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=tidygraph"
+    },
+    "5": {
+      "@type": "SoftwareApplication",
+      "identifier": "ggplot2",
+      "name": "ggplot2",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=ggplot2"
+    },
+    "6": {
+      "@type": "SoftwareApplication",
+      "identifier": "ggraph",
+      "name": "ggraph",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=ggraph"
+    },
     "SystemRequirements": null
   },
-  "fileSize": "12.635KB"
+  "fileSize": "15.278KB",
+  "readme": "https://github.com/rkrug/IPBES.R/blob/main/README.md"
 }

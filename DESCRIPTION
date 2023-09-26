@@ -16,8 +16,12 @@ BugReports: https://github.com/rkrug/IPBES.R/issues
 Description: More about what it does (maybe more than one line).
 License: GPL (>= 2)
 Imports:
+  openalexR,
   dplyr,
-  openalexR
+  writexl,
+  tidygraph,
+  ggplot2,
+  ggraph
 Suggests: tinytest
 Encoding: UTF-8
 RoxygenNote: 7.2.3

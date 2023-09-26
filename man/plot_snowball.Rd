@@ -29,3 +29,8 @@ if(interactive()){
  }
 }
 }
+\seealso{
+\code{\link[tidygraph]{as_tbl_graph.data.frame}}
+ \code{\link[ggraph]{ggraph}}, \code{\link[ggraph]{geom_edge_link}}, \code{\link[ggraph]{geom_node_point}}, \code{\link[ggraph]{geom_node_text}}, \code{\link[ggraph]{theme_graph}}
+ \code{\link[ggplot2]{aes}}, \code{\link[ggplot2]{character(0)}}, \code{\link[ggplot2]{scale_size}}, \code{\link[ggplot2]{scale_manual}}, \code{\link[ggplot2]{theme}}, \code{\link[ggplot2]{ggsave}}, \code{\link[ggplot2]{margin}}, \code{\link[ggplot2]{c("guide_bins", "guide_colourbar", "guide_coloursteps", "guide_legend", "guides", "guides")}}, \code{\link[ggplot2]{labs}}
+}
