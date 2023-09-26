@@ -4,3 +4,7 @@
 ^codemeta\.json$
 ^\.lintr$
 ^Makefile$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^\.github$
