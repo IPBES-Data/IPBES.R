@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://rkrug.github.io/IPBES.R/404.html</loc>
+  </url>
+  <url>
+    <loc>https://rkrug.github.io/IPBES.R/authors.html</loc>
+  </url>
+  <url>
+    <loc>https://rkrug.github.io/IPBES.R/index.html</loc>
+  </url>
+  <url>
+    <loc>https://rkrug.github.io/IPBES.R/reference/IPBES.R-package.html</loc>
+  </url>
+  <url>
+    <loc>https://rkrug.github.io/IPBES.R/reference/get_count.html</loc>
+  </url>
+  <url>
+    <loc>https://rkrug.github.io/IPBES.R/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>https://rkrug.github.io/IPBES.R/reference/plot_snowball.html</loc>
+  </url>
+  <url>
+    <loc>https://rkrug.github.io/IPBES.R/reference/to_xlsx.html</loc>
+  </url>
+</urlset>
