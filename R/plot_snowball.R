@@ -40,8 +40,8 @@ plot_snowball <- function(snowball, name, path = "figures") {
             panel.background = element_rect(fill = "transparent", colour = NA),
             legend.position = "bottom"
         ) +
-        guides(fill = "none") +
-            ggtitle(paste0(name, " Cited by average count per year"))
+        ggplot2::guides(fill = "none") +
+            ggplot2::ggtitle(paste0(name, " Cited by average count per year"))
 
     ggplot2::ggsave(file.path(path, paste0(name, "_cited_by_count_by_year.pdf")), plot = p_cby, device = cairo_pdf, width = 20, height = 15)
     ggplot2::ggsave(file.path(path, paste0(name, "_cited_by_count_by_year.png")), plot = p_cby, width = 20, height = 15, bg = "white")
@@ -68,5 +68,5 @@ plot_snowball <- function(snowball, name, path = "figures") {
     ggplot2::ggsave(file.path(path, paste0(name, "_cited_by_count.pdf")), plot = p_cb, device = cairo_pdf, width = 20, height = 15)
     ggplot2::ggsave(file.path(path, paste0(name, "_cited_by_count.png")), plot = p_cb, width = 20, height = 15, bg = "white")
 
-    return(p_cb)
+    return(list(size_by_count = p_cb, size_by_count_per_year = p_cby)
 }
