@@ -19,7 +19,7 @@
 #' @export
 #' @importFrom tidygraph as_tbl_graph
 #' @importFrom ggraph ggraph geom_edge_link geom_node_point geom_node_label theme_graph scale_edge_width
-#' @importFrom ggplot2 aes scale_size scale_fill_manual theme ggsave element_rect guides ggtitle
+#' @importFrom ggplot2 aes scale_size scale_fill_manual theme ggsave element_rect guides ggtitle after_stat
 plot_snowball <- function(snowball, name, path = "figures") {
     snowball$nodes$cited_by_count_by_year <- snowball$nodes$cited_by_count / (2024 - snowball$nodes$publication_year)
 
@@ -27,7 +27,7 @@ plot_snowball <- function(snowball, name, path = "figures") {
     p_cby <- snowball |>
         tidygraph::as_tbl_graph() |>
         ggraph::ggraph(graph = , layout = "stress") +
-        ggraph::geom_edge_link(aes(alpha = after_stat(index)), show.legend = FALSE) +
+        ggraph::geom_edge_link(aes(alpha = ggplot2::after_stat(index)), show.legend = FALSE) +
         ggraph::geom_node_point(ggplot2::aes(fill = oa_input, size = cited_by_count_by_year), shape = 21, color = "white") +
         ggraph::geom_node_label(ggplot2::aes(filter = oa_input, label = id), nudge_y = 0.2, size = 3) +
         ggraph::scale_edge_width(range = c(0.1, 1.5), guide = "none") +

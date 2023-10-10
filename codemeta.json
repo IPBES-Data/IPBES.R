@@ -8,7 +8,7 @@
   "codeRepository": "https://github.com/rkrug/IPBES.R",
   "issueTracker": "https://github.com/rkrug/IPBES.R/issues",
   "license": "https://spdx.org/licenses/GPL-2.0",
-  "version": "0.1",
+  "version": "0.2",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -122,6 +122,6 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "15.152KB",
+  "fileSize": "15.203KB",
   "readme": "https://github.com/IPBES-Data/IPBES.R/blob/main/README.md"
 }
