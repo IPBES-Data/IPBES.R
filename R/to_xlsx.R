@@ -1,7 +1,6 @@
 #' @title FUNCTION_TITLE
 #' @description FUNCTION_DESCRIPTION
 #' @param snowball PARAM_DESCRIPTION
-#' @param flat_snow PARAM_DESCRIPTION
 #' @param xls_filename PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
@@ -16,15 +15,18 @@
 #'  \code{\link[writexl]{write_xlsx}}
 #' @rdname to_xlsx
 #' @export
-#' @importFrom dplyr relocate
+#' @importFrom dplyr relocate rename mutate arrange select full_join
 #' @importFrom writexl write_xlsx
-to_xlsx <- function(snowball, flat_snow, xls_filename) {
+to_xlsx <- function(snowball, xls_filename) {
+
+    flat_snowball <- openalexR::snowball2df(snowball)
+
     no_edges <- snowball$edges |>
         unlist() |>
         table() |>
         sort() |>
         as.data.frame() |>
-        rename(
+        dplyr::rename(
             no_connections = Freq,
             id = Var1
         )

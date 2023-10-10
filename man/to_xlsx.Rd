@@ -4,12 +4,10 @@
 \alias{to_xlsx}
 \title{FUNCTION_TITLE}
 \usage{
-to_xlsx(snowball, flat_snow, xls_filename)
+to_xlsx(snowball, xls_filename)
 }
 \arguments{
 \item{snowball}{PARAM_DESCRIPTION}
-
-\item{flat_snow}{PARAM_DESCRIPTION}
 
 \item{xls_filename}{PARAM_DESCRIPTION}
 }

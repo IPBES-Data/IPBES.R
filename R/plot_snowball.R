@@ -3,7 +3,7 @@
 #' @param snowball PARAM_DESCRIPTION
 #' @param name PARAM_DESCRIPTION
 #' @param path PARAM_DESCRIPTION, Default: 'figures'
-#' @return OUTPUT_DESCRIPTION
+#' @return invisible OUTPUT_DESCRIPTION
 #' @details DETAILS
 #' @examples
 #' \dontrun{
@@ -67,5 +67,5 @@ plot_snowball <- function(snowball, name, path = "figures") {
     ggplot2::ggsave(file.path(path, paste0(name, "_cited_by_count.pdf")), plot = p_cb, device = cairo_pdf, width = 20, height = 15)
     ggplot2::ggsave(file.path(path, paste0(name, "_cited_by_count.png")), plot = p_cb, width = 20, height = 15, bg = "white")
 
-    return(list(size_by_count = p_cb, size_by_count_per_year = p_cby))
+    invisible(list(size_by_count = p_cb, size_by_count_per_year = p_cby))
 }

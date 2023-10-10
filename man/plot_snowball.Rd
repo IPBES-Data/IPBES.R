@@ -14,7 +14,7 @@ plot_snowball(snowball, name, path = "figures")
 \item{path}{PARAM_DESCRIPTION, Default: 'figures'}
 }
 \value{
-OUTPUT_DESCRIPTION
+invisible OUTPUT_DESCRIPTION
 }
 \description{
 FUNCTION_DESCRIPTION
