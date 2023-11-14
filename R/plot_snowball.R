@@ -12,7 +12,7 @@
 #'
 #' @importFrom tidygraph as_tbl_graph
 #' @importFrom ggraph ggraph geom_edge_link geom_node_point geom_node_label theme_graph scale_edge_width
-#' @importFrom ggplot2 aes after_stat scale_size scale_fill_manual theme element_rect guides ggtitle ggsave
+#' @importFrom ggplot2 aes after_stat scale_size scale_fill_manual theme element_rect guides ggtitle ggsave guide_legend
 #'
 #' @autoglobal
 #'
@@ -22,22 +22,59 @@
 #' }
 plot_snowball <- function(snowball, name, path = "figures") {
     snowball$nodes$cited_by_count_by_year <- snowball$nodes$cited_by_count / (2024 - snowball$nodes$publication_year)
+    snowball$nodes$auth_abbr <- IPBES.R::abbreviate_authors(x$nodes)
 
     ### Size cited_by_count_by_year
     p_cby <- snowball |>
         tidygraph::as_tbl_graph() |>
         ggraph::ggraph(graph = , layout = "stress") +
-        ggraph::geom_edge_link(aes(alpha = ggplot2::after_stat(index)), show.legend = FALSE) +
-        ggraph::geom_node_point(ggplot2::aes(fill = oa_input, size = cited_by_count_by_year), shape = 21, color = "white") +
-        ggraph::geom_node_label(ggplot2::aes(filter = oa_input, label = id), nudge_y = 0.2, size = 3) +
-        ggraph::scale_edge_width(range = c(0.1, 1.5), guide = "none") +
-        ggplot2::scale_size(range = c(3, 10), guide = "none") +
-        ggplot2::scale_fill_manual(values = c("#a3ad62", "#d46780"), na.value = "grey", name = "") +
+        ggraph::geom_edge_link(
+            aes(
+                alpha = ggplot2::after_stat(index),
+                # edge_width = ggplot2::after_stat(index)
+            ),
+            show.legend = FALSE
+        ) +
+        ggraph::geom_node_point(
+            ggplot2::aes(
+                size = cited_by_count_by_year,
+                shape = type,
+                col = oa_input
+            )
+        ) +
+        ggraph::geom_node_label(
+            ggplot2::aes(
+                filter = oa_input,
+                label = auth_abbr
+            ),
+            nudge_y = 0.2,
+            size = 3
+        ) +
+        ggraph::scale_edge_width(
+            range = c(0.1, 1.5),
+            guide = "none"
+        ) +
+
+        ggplot2::scale_shape(
+            solid = TRUE,
+            name = "Publication Type"
+        ) +
+        ggplot2::scale_size(
+            range = c(3, 10),
+            name = "Cited by average count per year"
+        ) +
+        ggplot2::scale_colour_manual(
+            values = c("#009E73", "orange"),
+            na.value = "grey",
+            name = "Key Paper",
+            guide = guide_legend()
+        ) +
+
         ggraph::theme_graph() +
         ggplot2::theme(
             plot.background = element_rect(fill = "transparent", colour = NA),
             panel.background = element_rect(fill = "transparent", colour = NA),
-            legend.position = "bottom"
+            legend.position = "right"
         ) +
         ggplot2::guides(fill = "none") +
         ggplot2::ggtitle(paste0(name, " Cited by average count per year"))
@@ -49,20 +86,56 @@ plot_snowball <- function(snowball, name, path = "figures") {
     p_cb <- snowball |>
         tidygraph::as_tbl_graph() |>
         ggraph::ggraph(graph = , layout = "stress") +
-        ggraph::geom_edge_link(ggplot2::aes(alpha = after_stat(index)), show.legend = FALSE) +
-        ggraph::geom_node_point(ggplot2::aes(fill = oa_input, size = cited_by_count), shape = 21, color = "white") +
-        ggraph::geom_node_label(ggplot2::aes(filter = oa_input, label = id), nudge_y = 0.2, size = 3) +
-        ggraph::scale_edge_width(range = c(0.1, 1.5), guide = "none") +
-        ggplot2::scale_size(range = c(3, 10), guide = "none") +
-        ggplot2::scale_fill_manual(values = c("#a3ad62", "#d46780"), na.value = "grey", name = "") +
+        ggraph::geom_edge_link(
+            aes(
+                alpha = ggplot2::after_stat(index),
+                # edge_width = ggplot2::after_stat(index)
+            ),
+            show.legend = FALSE
+        ) +
+        ggraph::geom_node_point(
+            ggplot2::aes(
+                size = cited_by_count,
+                shape = type,
+                col = oa_input
+            )
+        ) +
+        ggraph::geom_node_label(
+            ggplot2::aes(
+                filter = oa_input,
+                label = auth_abbr
+            ),
+            nudge_y = 0.2,
+            size = 3
+        ) +
+        ggraph::scale_edge_width(
+            range = c(0.1, 1.5),
+            guide = "none"
+        ) +
+
+        ggplot2::scale_shape(
+            solid = TRUE,
+            name = "Publication Type"
+        ) +
+        ggplot2::scale_size(
+            range = c(3, 10),
+            name = "Cited by average count per year"
+        ) +
+        ggplot2::scale_colour_manual(
+            values = c("#009E73", "orange"),
+            na.value = "grey",
+            name = "Key Paper",
+            guide = guide_legend()
+        ) +
+
         ggraph::theme_graph() +
         ggplot2::theme(
-            plot.background = ggplot2::element_rect(fill = "transparent", colour = NA),
-            panel.background = ggplot2::element_rect(fill = "transparent", colour = NA),
-            legend.position = "bottom"
+            plot.background = element_rect(fill = "transparent", colour = NA),
+            panel.background = element_rect(fill = "transparent", colour = NA),
+            legend.position = "right"
         ) +
         ggplot2::guides(fill = "none") +
-        ggplot2::ggtitle(paste0(name, " Cited by count"))
+        ggplot2::ggtitle(paste0(name, "Cited by count"))
 
     ggplot2::ggsave(file.path(path, paste0(name, "_cited_by_count.pdf")), plot = p_cb, device = cairo_pdf, width = 20, height = 15)
     ggplot2::ggsave(file.path(path, paste0(name, "_cited_by_count.png")), plot = p_cb, width = 20, height = 15, bg = "white")
