@@ -2,9 +2,10 @@
 
 utils::globalVariables(c(
   "index", # <plot_snowball>
-  "oa_input", # <plot_snowball>
   "cited_by_count_by_year", # <plot_snowball>
-  "id", # <plot_snowball>
+  "type", # <plot_snowball>
+  "oa_input", # <plot_snowball>
+  "auth_abbr", # <plot_snowball>
   "cairo_pdf", # <plot_snowball>
   "cited_by_count", # <plot_snowball>
   "Freq", # <to_xlsx>
