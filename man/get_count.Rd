@@ -2,32 +2,24 @@
 % Please edit documentation in R/get_count.R
 \name{get_count}
 \alias{get_count}
-\title{FUNCTION_TITLE}
+\title{Get Count}
 \usage{
 get_count(search_term, dois = NULL)
 }
 \arguments{
-\item{search_term}{PARAM_DESCRIPTION}
+\item{search_term}{The term to search for.}
 
-\item{dois}{PARAM_DESCRIPTION, Default: NULL}
+\item{dois}{A list of DOIs to search within. Default is NULL.}
 }
 \value{
-OUTPUT_DESCRIPTION
+A named list where the names are the DOIs and the values are the counts of the search term in each DOI.
 }
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
+This function takes a search term and a list of DOIs, and returns the count of the search term in each DOI.
+If duplicate DOIs are provided, the function will stop and throw an error.
 }
 \examples{
 \dontrun{
-if(interactive()){
- #EXAMPLE1
- }
+get_count("climate change", c("10.1038/nature12350", "10.1126/science.1259855"))
 }
-}
-\seealso{
-\code{\link[openalexR]{oa_query}}, \code{\link[openalexR]{oa_request}}
- \code{\link[dplyr]{select}}
 }

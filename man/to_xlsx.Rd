@@ -2,32 +2,23 @@
 % Please edit documentation in R/to_xlsx.R
 \name{to_xlsx}
 \alias{to_xlsx}
-\title{FUNCTION_TITLE}
+\title{Convert Snowball to XLSX}
 \usage{
 to_xlsx(snowball, xls_filename)
 }
 \arguments{
-\item{snowball}{PARAM_DESCRIPTION}
+\item{snowball}{A snowball object containing the data to be converted.}
 
-\item{xls_filename}{PARAM_DESCRIPTION}
+\item{xls_filename}{The name of the XLSX file to be created.}
 }
 \value{
-OUTPUT_DESCRIPTION
+No return value, called for side effects.
 }
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
+This function takes a snowball object and a filename, and converts the snowball object to an XLSX file.
 }
 \examples{
 \dontrun{
-if (interactive()) {
-    # EXAMPLE1
+to_xlsx(snowball, "example.xlsx")
 }
-}
-}
-\seealso{
-\code{\link[dplyr]{relocate}}
- \code{\link[writexl]{write_xlsx}}
 }

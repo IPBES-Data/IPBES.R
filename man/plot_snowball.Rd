@@ -2,35 +2,26 @@
 % Please edit documentation in R/plot_snowball.R
 \name{plot_snowball}
 \alias{plot_snowball}
-\title{FUNCTION_TITLE}
+\title{Plot Snowball}
 \usage{
 plot_snowball(snowball, name, path = "figures")
 }
 \arguments{
-\item{snowball}{PARAM_DESCRIPTION}
+\item{snowball}{A snowball object containing the data to be plotted.}
 
-\item{name}{PARAM_DESCRIPTION}
+\item{name}{The name to be used in the plot titles and file names.}
 
-\item{path}{PARAM_DESCRIPTION, Default: 'figures'}
+\item{path}{The path where the plot files will be saved. Default is "figures".}
 }
 \value{
-invisible OUTPUT_DESCRIPTION
+No return value, called for side effects.
 }
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
+This function takes a snowball object and a name, and creates two plots: one sized by cited_by_count and the other by cited_by_count_by_year.
+The plots are saved as both PDF and PNG in the specified path.
 }
 \examples{
 \dontrun{
-if (interactive()) {
-    # EXAMPLE1
+plot_snowball(snowball, "example")
 }
-}
-}
-\seealso{
-\code{\link[tidygraph]{as_tbl_graph.data.frame}}
- \code{\link[ggraph]{ggraph}}, \code{\link[ggraph]{geom_edge_link}}, \code{\link[ggraph]{geom_node_point}}, \code{\link[ggraph]{geom_node_text}}, \code{\link[ggraph]{theme_graph}}
- \code{\link[ggplot2]{aes}}, \code{\link[ggplot2]{character(0)}}, \code{\link[ggplot2]{scale_size}}, \code{\link[ggplot2]{scale_manual}}, \code{\link[ggplot2]{theme}}, \code{\link[ggplot2]{ggsave}}, \code{\link[ggplot2]{margin}}, \code{\link[ggplot2]{c("guide_bins", "guide_colourbar", "guide_coloursteps", "guide_legend", "guides", "guides")}}, \code{\link[ggplot2]{labs}}
 }

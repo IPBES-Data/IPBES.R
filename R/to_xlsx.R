@@ -1,22 +1,23 @@
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param snowball PARAM_DESCRIPTION
-#' @param xls_filename PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
+#' Convert Snowball to XLSX
+#'
+#' This function takes a snowball object and a filename, and converts the snowball object to an XLSX file.
+#'
+#' @param snowball A snowball object containing the data to be converted.
+#' @param xls_filename The name of the XLSX file to be created.
+#'
+#' @return No return value, called for side effects.
+#' @export
+#'
+#' @importFrom openalexR snowball2df
+#' @importFrom dplyr select mutate arrange rename full_join relocate filter desc
+#' @importFrom writexl write_xlsx
+#'
+#' @autoglobal
+#'
 #' @examples
 #' \dontrun{
-#' if (interactive()) {
-#'     # EXAMPLE1
+#' to_xlsx(snowball, "example.xlsx")
 #' }
-#' }
-#' @seealso
-#'  \code{\link[dplyr]{relocate}}
-#'  \code{\link[writexl]{write_xlsx}}
-#' @rdname to_xlsx
-#' @export
-#' @importFrom dplyr relocate rename mutate arrange select full_join
-#' @importFrom writexl write_xlsx
 to_xlsx <- function(snowball, xls_filename) {
     flat_snowball <- openalexR::snowball2df(snowball)
 

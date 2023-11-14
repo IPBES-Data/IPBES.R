@@ -1,7 +1,7 @@
 Package: IPBES.R
 Type: Package
 Title: Tool functions used by the Data and Knowledge Technical Support Unit of IPBES
-Version: 0.2.1
+Version: 0.2.2
 Date: 2023-11-13
 Authors@R: 
   c(person(given = "Rainer M.",
@@ -22,6 +22,12 @@ Imports:
   tidygraph,
   ggplot2,
   ggraph
-Suggests: tinytest
+Suggests: 
+    roxyglobals,
+    tinytest
 Encoding: UTF-8
 RoxygenNote: 7.2.3
+Roxygen: list(roclets = c("collate", "namespace", "rd",
+    "roxyglobals::global_roclet"))
+Config/roxyglobals/filename: globals.R
+Config/roxyglobals/unique: FALSE

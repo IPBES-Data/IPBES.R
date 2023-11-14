@@ -1,25 +1,25 @@
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param snowball PARAM_DESCRIPTION
-#' @param name PARAM_DESCRIPTION
-#' @param path PARAM_DESCRIPTION, Default: 'figures'
-#' @return invisible OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples
-#' \dontrun{
-#' if (interactive()) {
-#'     # EXAMPLE1
-#' }
-#' }
-#' @seealso
-#'  \code{\link[tidygraph]{as_tbl_graph.data.frame}}
-#'  \code{\link[ggraph]{ggraph}}, \code{\link[ggraph]{geom_edge_link}}, \code{\link[ggraph]{geom_node_point}}, \code{\link[ggraph]{geom_node_text}}, \code{\link[ggraph]{theme_graph}}
-#'  \code{\link[ggplot2]{aes}}, \code{\link[ggplot2]{character(0)}}, \code{\link[ggplot2]{scale_size}}, \code{\link[ggplot2]{scale_manual}}, \code{\link[ggplot2]{theme}}, \code{\link[ggplot2]{ggsave}}, \code{\link[ggplot2]{margin}}, \code{\link[ggplot2]{c("guide_bins", "guide_colourbar", "guide_coloursteps", "guide_legend", "guides", "guides")}}, \code{\link[ggplot2]{labs}}
-#' @rdname plot_snowball
+#' Plot Snowball
+#'
+#' This function takes a snowball object and a name, and creates two plots: one sized by cited_by_count and the other by cited_by_count_by_year.
+#' The plots are saved as both PDF and PNG in the specified path.
+#'
+#' @param snowball A snowball object containing the data to be plotted.
+#' @param name The name to be used in the plot titles and file names.
+#' @param path The path where the plot files will be saved. Default is "figures".
+#'
+#' @return No return value, called for side effects.
 #' @export
+#'
 #' @importFrom tidygraph as_tbl_graph
 #' @importFrom ggraph ggraph geom_edge_link geom_node_point geom_node_label theme_graph scale_edge_width
-#' @importFrom ggplot2 aes scale_size scale_fill_manual theme ggsave element_rect guides ggtitle after_stat
+#' @importFrom ggplot2 aes after_stat scale_size scale_fill_manual theme element_rect guides ggtitle ggsave
+#'
+#' @autoglobal
+#'
+#' @examples
+#' \dontrun{
+#' plot_snowball(snowball, "example")
+#' }
 plot_snowball <- function(snowball, name, path = "figures") {
     snowball$nodes$cited_by_count_by_year <- snowball$nodes$cited_by_count / (2024 - snowball$nodes$publication_year)
 
