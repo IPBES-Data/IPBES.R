@@ -18,7 +18,6 @@
 #' @importFrom dplyr relocate rename mutate arrange select full_join
 #' @importFrom writexl write_xlsx
 to_xlsx <- function(snowball, xls_filename) {
-
     flat_snowball <- openalexR::snowball2df(snowball)
 
     no_edges <- snowball$edges |>
@@ -192,8 +191,13 @@ to_xlsx <- function(snowball, xls_filename) {
         dplyr::relocate(author, .after = id) |>
         arrange(desc(cited_global))
 
-    la <- xlsx$abstract |>
-        nchar() >= 3000
+    la <- sapply(
+        xlsx$abstract,
+        function(a) {
+            isTRUE(nchar(a) >= 3000)
+        }
+    )
+
 
     xlsx$abstract[la] <- substr(xlsx$abstract[la], 1, 3000)
 
