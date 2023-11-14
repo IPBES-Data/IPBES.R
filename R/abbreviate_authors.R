@@ -27,6 +27,10 @@ abbreviate_authors <- function(
         a <- oa_works_df$author[[i]]
         if (!inherits(a, "data.frame")) {
             auth <- "NA"
+            auths <- c(
+                auths,
+                paste0(auth, " (", year, ")")
+            )
         } else {
             auth <- a$au_display_name |>
                 strsplit(split = " ") |>
