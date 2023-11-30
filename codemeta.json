@@ -8,13 +8,13 @@
   "codeRepository": "https://github.com/rkrug/IPBES.R",
   "issueTracker": "https://github.com/rkrug/IPBES.R/issues",
   "license": "https://spdx.org/licenses/GPL-2.0",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.3.1 (2023-06-16)",
+  "runtimePlatform": "R version 4.3.2 (2023-10-31)",
   "author": [
     {
       "@type": "Person",
@@ -134,6 +134,6 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "20.588KB",
+  "fileSize": "20.88KB",
   "readme": "https://github.com/IPBES-Data/IPBES.R/blob/main/README.md"
 }

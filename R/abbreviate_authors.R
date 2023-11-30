@@ -52,6 +52,10 @@ abbreviate_authors <- function(
             }
         }
     }
-
+    names(auths) <- oa_works_df$id |>
+        gsub(
+            pattern = "https://openalex.org/",
+            replacement = ""
+        )
     return(auths)
 }
