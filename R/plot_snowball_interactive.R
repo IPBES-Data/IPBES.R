@@ -19,16 +19,16 @@
 plot_snowball_interactive <- function(snowball) {
     ## Simple forceNetwork
     networkData <- data.frame(
-        src = snowball_1$edges$from,
-        target = snowball_1$edges$to,
+        src = snowball$edges$from,
+        target = snowball$edges$to,
         stringsAsFactors = FALSE
     )
 
     nodes <- data.frame(
-        name = snowball_1$nodes$id,
-        author = IPBES.R::abbreviate_authors(snowball_1$nodes),
-        doi = snowball_1$nodes$doi,
-        nodesize = snowball_1$nodes$cited_by_count / (2024 - snowball_1$nodes$publication_year) * 0.5,
+        name = snowball$nodes$id,
+        author = IPBES.R::abbreviate_authors(snowball$nodes),
+        doi = snowball$nodes$doi,
+        nodesize = snowball$nodes$cited_by_count / (2024 - snowball$nodes$publication_year) * 0.5,
         stringsAsFactors = FALSE
     )
     nodes$id <- 0:(nrow(nodes) - 1)
