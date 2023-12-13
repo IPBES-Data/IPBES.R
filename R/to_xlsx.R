@@ -19,7 +19,7 @@
 #' to_xlsx(snowball, "example.xlsx")
 #' }
 to_xlsx <- function(snowball, xls_filename) {
-    flat_snowball <- openalexR::snowball2df(snowball)
+    flat_snow <- openalexR::snowball2df(snowball)
 
     no_edges <- snowball$edges |>
         unlist() |>

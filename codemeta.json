@@ -8,7 +8,7 @@
   "codeRepository": "https://github.com/rkrug/IPBES.R",
   "issueTracker": "https://github.com/rkrug/IPBES.R/issues",
   "license": "https://spdx.org/licenses/GPL-2.0",
-  "version": "0.2.4",
+  "version": "0.2.6",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -132,8 +132,20 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=ggraph"
     },
+    "7": {
+      "@type": "SoftwareApplication",
+      "identifier": "networkD3",
+      "name": "networkD3",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=networkD3"
+    },
     "SystemRequirements": null
   },
-  "fileSize": "20.88KB",
+  "fileSize": "24.032KB",
   "readme": "https://github.com/IPBES-Data/IPBES.R/blob/main/README.md"
 }
