@@ -1,7 +1,7 @@
 Package: IPBES.R
 Type: Package
 Title: Tool functions used by the Data and Knowledge Technical Support Unit of IPBES
-Version: 0.2.7
+Version: 0.2.8
 Date: 2023-11-13
 Authors@R: 
   c(person(given = "Rainer M.",

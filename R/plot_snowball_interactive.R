@@ -4,8 +4,12 @@
 #'
 #' @param snowball The snowball object containing the network data. The object is returned from the
 #'   \link[openalexR]{oa_snowball function in the `openalexR`` package
+#' @param key_works A data frame, as returned. e.g. by `oa_fetch(entity = "works", ...`,
+#'   containing the key-works from the snowball search which will be highlighted in the network.
+#' @param file The file name to save the network to. TThe directory has tro esxist.
+#'   Default: `NULL`, i.e. not saved.
 #'
-#' @importFrom networkD3 forceNetwork
+#' @importFrom networkD3 forceNetwork JS
 #'
 #' @return A networkD3 object representing the interactive network plot.
 #'
@@ -16,7 +20,7 @@
 #' plot_snowball_interactive(snowball)
 #' }
 #' @export
-plot_snowball_interactive <- function(snowball) {
+plot_snowball_interactive <- function(snowball, key_works, file) {
     ## Simple forceNetwork
     networkData <- data.frame(
         src = snowball$edges$from,
@@ -80,6 +84,25 @@ plot_snowball_interactive <- function(snowball) {
     )
 
     nwg$x$nodes$doi <- nodes$doi
+
+    if (!missing(file)) {
+        tmpdir <- tempfile()
+        dir.create(tmpdir)
+        on.exit(unlink(tmpdir, recursive = TRUE))
+
+        tmpfile <- file.path(tmpdir, "nwg.html")
+
+        networkD3::saveNetwork(
+            nwg,
+            file = tmpfile,
+            selfcontained = TRUE
+        )
+
+        file.copy(
+            tmpfile,
+            file
+        )
+    }
 
     nwg
 }

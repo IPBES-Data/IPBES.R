@@ -4,7 +4,14 @@
 \alias{plot_snowball_interactive}
 \title{Plot an Interactive Citation Network from a Snowball Search}
 \usage{
-plot_snowball_interactive(snowball)
+plot_snowball_interactive(snowball, key_works, file)
+}
+\arguments{
+\item{key_works}{A data frame, as returned. e.g. by \verb{oa_fetch(entity = "works", ...},
+containing the key-works from the snowball search which will be highlighted in the network.}
+
+\item{file}{The file name to save the network to. TThe directory has tro esxist.
+Default: \code{NULL}, i.e. not saved.}
 }
 \value{
 A networkD3 object representing the interactive network plot.
