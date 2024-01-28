@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">IPBES.R</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,7 +53,12 @@
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>key_works</dt>
+    <dl><dt>snowball</dt>
+<dd><p>The snowball object containing the network data. The object is returned from the
+<a href="https://docs.ropensci.org/openalexR/reference/oa_snowball.html" class="external-link">oa_snowball</a> function in the `openalexR`` package</p></dd>
+
+
+<dt>key_works</dt>
 <dd><p>A data frame, as returned. e.g. by <code>oa_fetch(entity = "works", ...</code>,
 containing the key-works from the snowball search which will be highlighted in the network.</p></dd>
 
@@ -73,7 +78,7 @@ Default: <code>NULL</code>, i.e. not saved.</p></dd>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="fu">plot_snowball_interactive</span><span class="op">(</span><span class="va">snowball</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">plot_snowball_interactive</span><span class="op">(</span><span class="va">snowball</span>, <span class="va">key_works</span>, <span class="va">file</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
