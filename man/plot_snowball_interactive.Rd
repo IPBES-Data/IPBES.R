@@ -7,6 +7,9 @@
 plot_snowball_interactive(snowball, key_works, file)
 }
 \arguments{
+\item{snowball}{The snowball object containing the network data. The object is returned from the
+\link[openalexR]{oa_snowball} function in the `openalexR`` package}
+
 \item{key_works}{A data frame, as returned. e.g. by \verb{oa_fetch(entity = "works", ...},
 containing the key-works from the snowball search which will be highlighted in the network.}
 
@@ -21,6 +24,6 @@ This function creates a interactive snowball seaarch network using the networkD3
 }
 \examples{
 \dontrun{
-plot_snowball_interactive(snowball)
+plot_snowball_interactive(snowball, key_works, file)
 }
 }

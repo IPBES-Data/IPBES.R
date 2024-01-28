@@ -1,7 +1,7 @@
 Package: IPBES.R
 Type: Package
 Title: Tool functions used by the Data and Knowledge Technical Support Unit of IPBES
-Version: 0.2.8
+Version: 0.3.0
 Date: 2023-11-13
 Authors@R: 
   c(person(given = "Rainer M.",
@@ -22,7 +22,8 @@ Imports:
   tidygraph,
   ggplot2,
   ggraph,
-  networkD3
+  networkD3,
+  httr2
 Suggests: 
     roxyglobals,
     tinytest

@@ -3,7 +3,7 @@
 #' This function creates a interactive snowball seaarch network using the networkD3 package.
 #'
 #' @param snowball The snowball object containing the network data. The object is returned from the
-#'   \link[openalexR]{oa_snowball function in the `openalexR`` package
+#'   \link[openalexR]{oa_snowball} function in the `openalexR`` package
 #' @param key_works A data frame, as returned. e.g. by `oa_fetch(entity = "works", ...`,
 #'   containing the key-works from the snowball search which will be highlighted in the network.
 #' @param file The file name to save the network to. TThe directory has tro esxist.
@@ -11,13 +11,15 @@
 #'
 #' @importFrom networkD3 forceNetwork JS
 #'
+#' @importFrom dplyr mutate select rename left_join
+#'
 #' @return A networkD3 object representing the interactive network plot.
 #'
 #' @md
 #'
 #' @examples
 #' \dontrun{
-#' plot_snowball_interactive(snowball)
+#' plot_snowball_interactive(snowball, key_works, file)
 #' }
 #' @export
 plot_snowball_interactive <- function(snowball, key_works, file) {
