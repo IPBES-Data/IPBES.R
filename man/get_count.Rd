@@ -4,7 +4,7 @@
 \alias{get_count}
 \title{Get Count}
 \usage{
-get_count(search_term, dois = NULL)
+get_count(search_term, dois = NULL, ...)
 }
 \arguments{
 \item{search_term}{The term to search for.}
