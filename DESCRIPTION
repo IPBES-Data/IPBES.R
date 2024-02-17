@@ -15,6 +15,7 @@ URL: https://github.com/rkrug/IPBES.R, https://rkrug.github.io/IPBES.R/
 BugReports: https://github.com/rkrug/IPBES.R/issues
 Description: More about what it does (maybe more than one line).
 License: GPL (>= 2)
+Depends: R (>= 3.5.0)
 Imports:
   openalexR,
   dplyr,
@@ -23,7 +24,12 @@ Imports:
   ggplot2,
   ggraph,
   networkD3,
-  httr2
+  httr2,
+  tibble,
+  tidyterra,
+  terra,
+  countrycode,
+  geodata
 Suggests: 
     roxyglobals,
     tinytest

@@ -2,12 +2,13 @@
 #'
 #' This function downloads and plots the GADM and IPBES regions according to a list of ISO codes provided.
 #'
-#' @param iso2c A character vector of ISO2 country codes. Will be converted to ISO3 country codes.
-#' @param iso3c A character vector of ISO3 country codes. Default is NULL. If `iso2c` and `iso3c` are `NULL`, an example is used.
+#' @param data `data.frame` or `tibble` containing at least one column called `iso2c` or `iso3c.
+#' @param values The name of the column to be plotted as the value in the maps. This is also used for the legend title.
 #' @param map_type A character string specifying the type of map to plot. Must be one of 'countries', 'regions', or 'subregions'. Default is 'countries'.
 #' @param geodata_path A character string specifying the path to store the geospatial directory to download data to. Default is a temporary file.
 #'
 #' @importFrom ggplot2 aes ggplot scale_fill_viridis_d coord_sf
+#' @importFrom tibble add_row
 #' @importFrom tidyterra filter geom_spatvector
 #' @importFrom terra vect
 #' @importFrom dplyr left_join select distinct filter rename
@@ -24,8 +25,8 @@
 #'
 #' @export
 map_country_codes <- function(
-    iso2c = NULL,
-    iso3c = NULL,
+    data = NULL,
+    values = NULL,
     map_type = "countries",
     geodata_path = tempfile()) {
     if (!(map_type %in% c("countries", "regions", "subregions"))) {
@@ -35,28 +36,19 @@ map_country_codes <- function(
     # This script downloads and plots the GADM and IPBES regions according to a list of iso codes provided
     # written by @yanisica
 
-    if (!is.null(iso2c) & is.null(iso3c)) {
-        iso3 <- countrycode::countrycode(origin = "iso2c", destination = "iso3c", iso2c)
+    if (is.null(data)) {
+        warning("No data provided. Using default country codes.")
+        data <- readRDS(
+            system.file(
+                package = "IPBES.R",
+                "spatial", "countrycodes.csv"
+            )
+        )
+        values <- "n"
     }
-    if (is.null(iso3c)) {
-        ## List of countries (convert to iso3)----
-        iso3 <- system.file(
-            package = "IPBES.R",
-            "spatial", "countrycodes.csv"
-        ) |>
-            read.csv() |>
-            dplyr::select(iso2 = x) |>
-            dplyr::distinct() |>
-            dplyr::filter(!is.na(iso2)) |>
-            select(iso2) |>
-            unlist() |>
-            countrycode::countrycode(origin = "iso2c", destination = "iso3c") |>
-            data.frame() |>
-            rename(iso3 = 1) |>
-            filter(!is.na(iso3))
 
-        # Some values were not matched unambiguously: XK --> Kosovo??
-        # iso3[97, 1] <- "XKO"
+    if (is.null(data$iso3c)) {
+        data$iso3c <- countrycode::countrycode(origin = "iso2c", destination = "iso3c", data$iso2c)
     }
 
     if (map_type == "countries") {
@@ -68,23 +60,42 @@ map_country_codes <- function(
             version = "3.6" # only available
         )
 
-        # Get selected countries-----
-        selected_country <- tidyterra::filter(world, GID_0 %in% unique(iso3$iso3))
 
+        cc_not_world <- data[!(data$iso3c %in% world$GID_0), ]$iso3c
+        if (length(cc_not_world) > 0) {
+            warning(
+                paste0(
+                    "The following countries are not in the world dataset: \n",
+                    paste0(cc_not_world, collapse = ", "), "\n",
+                    "and will therefore not be plotted!"
+                )
+            )
+        }
+        data <- data[data$iso3c %in% world$GID_0, ]
+
+        ms_c <- world$GID_0[world$GID_0 %in% unique(data$iso3c)]
+
+        data <- data |>
+            tibble::add_row(
+                iso3c = world$GID_0[!(world$GID_0 %in% unique(data$iso3c))]
+            )
+
+        data <- data[match(world$GID_0, data$iso3c), ]
+
+        # Get selected countries-----
         # Plot----
-        countries <- tidyterra::filter(
-            world,
-            GID_0 %in% unique(iso3$iso3)
-        ) |>
+        # selected_country <- tidyterra::filter(world, GID_0 %in% unique(data$iso3c))
+        countries <- world |>
             ggplot2::ggplot() +
             tidyterra::geom_spatvector(
-                mapping = ggplot2::aes(fill = NAME_0),
+                mapping = ggplot2::aes(fill = data[[values]]),
                 color = NA,
                 data = NULL,
                 na.rm = FALSE,
-                show.legend = FALSE
+                show.legend = TRUE
             ) +
-            ggplot2::scale_fill_viridis_d() +
+            ggplot2::labs(fill = values) +
+            # ggplot2::scale_fill_viridis_d() +
             ggplot2::coord_sf(crs = 4326) # latlong
         return(countries)
     } else {
@@ -101,11 +112,10 @@ map_country_codes <- function(
             )
         )
 
-        selected_iso_regions <- iso3 |>
-            data.frame() |>
+        selected_iso_regions <- data |>
             dplyr::left_join(
                 ipbes_regions_df,
-                by = c("iso3" = "GID_0")
+                by = c("iso3c" = "GID_0")
             ) |>
             dplyr::select(
                 -ISO_3,
@@ -114,6 +124,7 @@ map_country_codes <- function(
     }
 
     if (map_type == "regions") {
+        stop("Regions not yet implemented")
         region <- tidyterra::filter(
             ipbes_regions_simp,
             Region %in% unique(selected_iso_regions$Region)
@@ -130,6 +141,7 @@ map_country_codes <- function(
             ggplot2::coord_sf(crs = 4326) # latlong
         return(region)
     } else if (map_type == "subregions") {
+        stop("Subregions not yet implemented")
         sub_region <- tidyterra::filter(
             ipbes_regions_simp,
             Sub_Region %in% unique(selected_iso_regions$Sub_Region)

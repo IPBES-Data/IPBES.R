@@ -5,16 +5,16 @@
 \title{Draw Map Map of Country Codes}
 \usage{
 map_country_codes(
-  iso2c = NULL,
-  iso3c = NULL,
+  data = NULL,
+  values = NULL,
   map_type = "countries",
   geodata_path = tempfile()
 )
 }
 \arguments{
-\item{iso2c}{A character vector of ISO2 country codes. Will be converted to ISO3 country codes.}
+\item{data}{\code{data.frame} or \code{tibble} containing at least one column called \code{iso2c} or `iso3c.}
 
-\item{iso3c}{A character vector of ISO3 country codes. Default is NULL. If \code{iso2c} and \code{iso3c} are \code{NULL}, an example is used.}
+\item{values}{The name of the column to be plotted as the value in the maps. This is also used for the legend title.}
 
 \item{map_type}{A character string specifying the type of map to plot. Must be one of 'countries', 'regions', or 'subregions'. Default is 'countries'.}
 
