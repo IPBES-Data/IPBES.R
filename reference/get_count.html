@@ -51,7 +51,7 @@ If duplicate DOIs are provided, the function will stop and throw an error.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_count</span><span class="op">(</span><span class="va">search_term</span>, dois <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_count</span><span class="op">(</span><span class="va">search_term</span>, dois <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -62,6 +62,10 @@ If duplicate DOIs are provided, the function will stop and throw an error.</p>
 
 <dt>dois</dt>
 <dd><p>A list of DOIs to search within. Default is NULL.</p></dd>
+
+
+<dt>...</dt>
+<dd><p>Additional Additional filter arguments to pass to `oa_query` as</p></dd>
 
 </dl></div>
     <div class="section level2">
