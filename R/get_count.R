@@ -5,7 +5,7 @@
 #'
 #' @param search_term The term to search for.
 #' @param dois A list of DOIs to search within. Default is NULL.
-#' @params ... Additional Additional filter arguments to pass to `oa_query` as
+#' @param ... Additional Additional filter arguments to pass to `oa_query` as
 #'
 #' @return A named list where the names are the DOIs and the values are the counts of the search term in each DOI.
 #'

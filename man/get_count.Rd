@@ -10,6 +10,8 @@ get_count(search_term, dois = NULL, ...)
 \item{search_term}{The term to search for.}
 
 \item{dois}{A list of DOIs to search within. Default is NULL.}
+
+\item{...}{Additional Additional filter arguments to pass to `oa_query` as}
 }
 \value{
 A named list where the names are the DOIs and the values are the counts of the search term in each DOI.
