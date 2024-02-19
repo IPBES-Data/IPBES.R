@@ -21,7 +21,8 @@
 #' }
 get_count <- function(
     search_term,
-    dois = NULL) {
+    dois = NULL,
+    ...) {
     if (length(dois) != length(unique(dois))) {
         stop("\n Duplicate DOIs are not supported!")
     }

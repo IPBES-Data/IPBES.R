@@ -1,7 +1,7 @@
 Package: IPBES.R
 Type: Package
 Title: Tool functions used by the Data and Knowledge Technical Support Unit of IPBES
-Version: 0.3.1
+Version: 0.4.1
 Date: 2023-11-13
 Authors@R: 
   c(person(given = "Rainer M.",
@@ -23,7 +23,13 @@ Imports:
   ggplot2,
   ggraph,
   networkD3,
-  httr2
+  httr2,
+  tibble,
+  tidyterra,
+  terra,
+  countrycode,
+  geodata,
+  DT
 Suggests: 
     roxyglobals,
     tinytest
