@@ -5,7 +5,7 @@
 \title{Create a DataTable with various export options}
 \usage{
 table_dt(
-  x,
+  data,
   buttons = list(list(extend = "csv", filename = fn), list(extend = "excel", filename =
     fn), list(extend = "pdf", filename = fn, orientation = "landscape", customize =
     DT::JS("function(doc) {", "  doc.defaultStyle.fontSize = 5;", "}")), "print"),
@@ -18,7 +18,7 @@ table_dt(
 )
 }
 \arguments{
-\item{x}{The data to be displayed in the DataTable}
+\item{data}{The data to be displayed in the DataTable}
 
 \item{buttons}{A list of buttons to be displayed in the DataTable}
 
@@ -38,7 +38,7 @@ table_dt(
 A DataTable object
 }
 \description{
-Create a DataTable with various export options
+This is a wrapper around the DT::datatable() function that adds buttons for exporting the table to CSV, Excel, and PDF, as well as a print button. It also enables scrolling and fixed columns by default.
 }
 \examples{
 table_dt(iris)
