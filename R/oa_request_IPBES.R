@@ -2,6 +2,7 @@
 #'
 #' This a slight adaptation from the function `oa_request` from the package [openalexR](https://github.com/ropensci/openalexR)
 #' It has the additional argument `output_path` to save the results in a file and not compile them in memory.
+#' When the transfer is interrupted, the existing files are not overwritten but skipped.
 #' Here the original documentation:
 #' `oa_request` makes a request and downloads bibliographic records from
 #' OpenAlex database \href{https://openalex.org/}{https://openalex.org/}.
@@ -245,7 +246,10 @@ oa_request_IPBES <- function(query_url,
         if (is.null(output_path)) {
             if (!is.null(res$results)) data[[i]] <- res$results
         } else {
-            saveRDS(res, file.path(output_path, paste0("page_", i, ".rds")))
+            fn <- file.path(output_path, paste0("page_", i, ".rds"))
+            if (!file.exists(fn)) {
+                saveRDS(res, fn)
+            }
         }
     }
 

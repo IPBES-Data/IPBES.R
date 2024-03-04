@@ -11,8 +11,8 @@ Authors@R:
            comment = c(ORCID = "0000-0001-8049-7069"))
   )
 Maintainer: Rainer M. Krug <Rainer@krugs.de>
-URL: https://github.com/rkrug/IPBES.R, https://rkrug.github.io/IPBES.R/, https://ipbes-data.github.io/IPBES.R/
-BugReports: https://github.com/rkrug/IPBES.R/issues
+URL: https://ipbes-data.github.io/IPBES.R/, https://github.com/ipbes-data/IPBES.R
+BugReports: https://github.com/ipbes-data/IPBES.R/issues
 Description: More about what it does (maybe more than one line).
 License: GPL (>= 2)
 Imports:

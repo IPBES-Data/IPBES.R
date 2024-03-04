@@ -2,6 +2,7 @@
 #'
 #' This is a wrapper around the DT::datatable() function that adds buttons for exporting the table to CSV, Excel, and PDF, as well as a print button. It also enables scrolling and fixed columns by default.
 #' @param data The data to be displayed in the DataTable
+#' @param fn The filename to be used for the exported files when using the default button definition
 #' @param buttons A list of buttons to be displayed in the DataTable
 #' @param scroller Logical value indicating whether to enable scrolling in the DataTable
 #' @param scrollY JavaScript code to set the height of the DataTable
@@ -20,6 +21,7 @@
 #' table_dt(iris)
 table_dt <- function(
     data,
+    fn = "datatable",
     buttons = list(
         list(
             extend = "csv",

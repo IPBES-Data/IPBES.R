@@ -6,6 +6,7 @@
 \usage{
 table_dt(
   data,
+  fn = "datatable",
   buttons = list(list(extend = "csv", filename = fn), list(extend = "excel", filename =
     fn), list(extend = "pdf", filename = fn, orientation = "landscape", customize =
     DT::JS("function(doc) {", "  doc.defaultStyle.fontSize = 5;", "}")), "print"),
@@ -19,6 +20,8 @@ table_dt(
 }
 \arguments{
 \item{data}{The data to be displayed in the DataTable}
+
+\item{fn}{The filename to be used for the exported files when using the default button definition}
 
 \item{buttons}{A list of buttons to be displayed in the DataTable}
 
