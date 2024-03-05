@@ -15,6 +15,7 @@ URL: https://ipbes-data.github.io/IPBES.R/, https://github.com/ipbes-data/IPBES.
 BugReports: https://github.com/ipbes-data/IPBES.R/issues
 Description: More about what it does (maybe more than one line).
 License: GPL (>= 2)
+Depends: R (>= 3.5.0)
 Imports:
   openalexR,
   dplyr,

@@ -107,14 +107,17 @@ to_xlsx <- function(
     )
 
 
+    c
     concepts <- lapply(
         flat_snow$concepts,
         function(x) {
-            x |>
-                select(level, display_name, score)
+            if (isTRUE(is.na(x))) {
+                return(NULL)
+            } else {
+                select(x, level, display_name, score)
+            }
         }
     )
-
     export$concepts_l0 <- sapply(
         concepts,
         function(x) {

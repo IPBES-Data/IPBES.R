@@ -5,6 +5,7 @@
 #'
 #' @param search_term The term to search for.
 #' @param dois A list of DOIs to search within. Default is NULL.
+#' @param ... Additional Additional filter arguments to pass to `oa_query` as
 #'
 #' @return A named list where the names are the DOIs and the values are the counts of the search term in each DOI.
 #'
@@ -29,7 +30,11 @@ get_count <- function(
     count <- as.list(dois) |>
         sapply(
             FUN = function(doi) {
-                openalexR::oa_query(search = search_term, filter = c(doi = doi)) |>
+                openalexR::oa_query(
+                    search = search_term,
+                    filter = c(doi = doi),
+                    ...
+                ) |>
                     openalexR::oa_request(count_only = TRUE) |>
                     unlist()
             }
