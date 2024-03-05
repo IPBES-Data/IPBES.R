@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">IPBES.R</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -25,7 +25,7 @@
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
       <ul class="navbar-nav"><li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/rkrug/IPBES.R/" aria-label="github">
+  <a class="external-link nav-link" href="https://github.com/ipbes-data/IPBES.R/" aria-label="github">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -38,7 +38,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Check if DOIs exist</h1>
-      <small class="dont-index">Source: <a href="https://github.com/rkrug/IPBES.R/blob/HEAD/R/doi_exists.R" class="external-link"><code>R/doi_exists.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/ipbes-data/IPBES.R/blob/HEAD/R/doi_exists.R" class="external-link"><code>R/doi_exists.R</code></a></small>
       <div class="d-none name"><code>doi_exists.Rd</code></div>
     </div>
 
@@ -58,7 +58,7 @@
 
 
 <dt>cache_file</dt>
-<dd><p>A file name of the cache to be used, i.e. the confirmed existing dois. The format is a character vector with the DOIs which exist. If the cache exist, it will be updated at the end.</p></dd>
+<dd><p>A file name of the cache to be used, i.e. the confirmed existing dois. The format is a character vector with the DOIs which exist. If the cache exist, it will be updated at the end. Temporary caches will be written after 100 checks.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -76,12 +76,18 @@
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">dois</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sbcd1234"</span>, <span class="st">"10.1234/abcd"</span>, <span class="st">"10.1002/jcb.23190"</span>, <span class="st">"10.47366/sabia.v5n1a3"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">doi_exists</span><span class="op">(</span><span class="va">dois</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Progress: 1 of 4Progress: 2 of 4</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 1 of </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 2 of </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Waiting 2s for throttling delay <span style="color: #00BB00;">■■■■■■■■■■■■■■■                 </span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Waiting 2s for throttling delay <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Progress: 3 of 4</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 3 of </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Progress: 4 of </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Waiting 2s for throttling delay <span style="color: #00BB00;">■■■■■■■■■■■■■■■                 </span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Waiting 2s for throttling delay <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Progress: 4 of 4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>              sbcd1234          10.1234/abcd     10.1002/jcb.23190 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 FALSE                 FALSE                 FALSE </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 10.47366/sabia.v5n1a3 </span>
