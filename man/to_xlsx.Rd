@@ -4,15 +4,16 @@
 \alias{to_xlsx}
 \title{Convert Snowball to XLSX}
 \usage{
-to_xlsx(snowball, xls_filename)
+to_xlsx(snowball, xls_filename = NULL)
 }
 \arguments{
 \item{snowball}{A snowball object containing the data to be converted.}
 
-\item{xls_filename}{The name of the XLSX file to be created.}
+\item{xls_filename}{If not `\code{NULL} the name of the XLSX file to be created. if \code{NULL} the data
+will not be saved in a csv but only returned invisilbly}
 }
 \value{
-No return value, called for side effects.
+Invisibly the \code{data.frame} generated
 }
 \description{
 This function takes a snowball object and a filename, and converts the snowball object to an XLSX file.

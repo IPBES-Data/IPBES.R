@@ -62,7 +62,7 @@ For more extensive information about OpenAlex API, please visit:
 This a slight adaptation from the function \code{oa_request} from the package \href{https://github.com/ropensci/openalexR}{openalexR}
 It has the additional argument \code{output_path} to save the results in a file and not compile them in memory.
 When the transfer is interrupted, the existing files are not overwritten but skipped.
-Here the original documentation:
+\strong{From Here the original documentation:}
 \code{oa_request} makes a request and downloads bibliographic records from
 OpenAlex database \href{https://openalex.org/}{https://openalex.org/}.
 The function \code{oa_request} queries OpenAlex database using a query

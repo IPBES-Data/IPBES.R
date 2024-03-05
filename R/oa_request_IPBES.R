@@ -3,7 +3,7 @@
 #' This a slight adaptation from the function `oa_request` from the package [openalexR](https://github.com/ropensci/openalexR)
 #' It has the additional argument `output_path` to save the results in a file and not compile them in memory.
 #' When the transfer is interrupted, the existing files are not overwritten but skipped.
-#' Here the original documentation:
+#' **From Here the original documentation:**
 #' `oa_request` makes a request and downloads bibliographic records from
 #' OpenAlex database \href{https://openalex.org/}{https://openalex.org/}.
 #' The function \code{oa_request} queries OpenAlex database using a query
@@ -239,17 +239,37 @@ oa_request_IPBES <- function(query_url,
     res <- NULL
     for (i in pages) {
         if (verbose) pb$tick()
-        Sys.sleep(1 / 100)
-        next_page <- openalexR:::get_next_page(paging, i, res)
-        query_ls[[paging]] <- next_page
-        res <- openalexR:::api_request(query_url, ua, query = query_ls)
+
         if (is.null(output_path)) {
+            Sys.sleep(1 / 100)
+
+            next_page <- openalexR:::get_next_page(paging, i, res)
+            query_ls[[paging]] <- next_page
+            res <- openalexR:::api_request(query_url, ua, query = query_ls)
+
             if (!is.null(res$results)) data[[i]] <- res$results
         } else {
+            if (file.exists(file.path(output_path, "page.rds"))) {
+                i <- readRDS(file.path(output_path, "page.rds"))
+                query_ls <- saveRDS(file.path(output_path, "query_ls.rds"))
+            } else {
+                next_page <- openalexR:::get_next_page(paging, i, res)
+                query_ls[[paging]] <- next_page
+                saveRDS(i, file.path(output_path, "page.rds"))
+                saveRDS(query_ls, file.path(output_path, "query_ls.rds"))
+            }
+            Sys.sleep(1 / 100)
+
+            res <- openalexR:::api_request(query_url, ua, query = query_ls)
             fn <- file.path(output_path, paste0("page_", i, ".rds"))
             if (!file.exists(fn)) {
                 saveRDS(res, fn)
+            } else {
+                stop("There is inconsistency in the output path. The file ", fn, " already exists.\n", "Please empty the output path and try again.")
             }
+
+            unlink(file.path(output_path, "query_ls.rds"))
+            unlink(file.path(output_path, "page.rds"))
         }
     }
 
