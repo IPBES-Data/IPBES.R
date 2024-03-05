@@ -9,7 +9,7 @@ library(httr2)
 #' @details This function uses the httr package to send HTTP GET requests to the DOI resolver and checks the response status code. A status code of 200 indicates that the DOI exists, while any other status code indicates that the DOI does not exist.
 #'
 #' @param dois A character vector of DOIs to check.
-#' @param cache_file A file name of the cache to be used, i.e. the confirmed existing dois. The format is a character vector with the DOIs which exist. If the cache exist, it will be updated at the end.
+#' @param cache_file A file name of the cache to be used, i.e. the confirmed existing dois. The format is a character vector with the DOIs which exist. If the cache exist, it will be updated at the end. Temporary caches will be written after 100 checks.
 #'
 #' @return A named logical vector indicating whether each DOI does exist or not, names are the dois.
 #'
@@ -23,70 +23,86 @@ library(httr2)
 #' @export
 doi_exists <- function(dois, cache_file = NULL) {
     if (is.null(cache_file)) {
-        dois_to_check <- 1:length(dois)
         cache <- NULL
+        dois_to_check <- dois
     } else {
         if (file.exists(cache_file)) {
             cache <- readRDS(cache_file)
-            dois_to_check <- (1:length(dois))[!(dois %in% cache)]
+            dois_to_check <- dois[!(dois %in% cache)]
         } else {
-            dois_to_check <- 1:length(dois)
             cache <- NULL
+            dois_to_check <- dois
         }
     }
 
-    total <- length(dois_to_check)
-    result_dois_checked <- sapply(
-        dois_to_check,
-        function(i) {
-            # Print progress
-            cat(sprintf("\rProgress: %d of %d", i, total))
-
-            if (is.na(dois[i])) {
-                return(NA)
-            } else {
-                tryCatch(
-                    {
-                        status <- httr2::request(paste0("https://doi.org/", dois[i])) |>
-                            httr2::req_headers(
-                                noredirect = TRUE,
-                                type = "URL"
-                            ) |>
-                            httr2::req_throttle(
-                                rate = 30 / 60
-                            ) |>
-                            httr2::req_retry(
-                                max_tries = 5
-                            ) |>
-                            req_error(
-                                is_error = function(e) {
-                                    FALSE
-                                }
-                            ) |>
-                            httr2::req_perform() |>
-                            httr2::resp_status()
-                        return(status == 200)
-                    },
-                    error = function(e) {
-                        return(NA)
-                    }
-                )
-            }
-        }
-    )
-
-    result <- dois
+    result <- logical(length(dois))
     result[] <- NA
-    result <- as.logical(result)
     names(result) <- dois
 
-    result[dois_to_check] <- result_dois_checked
-
-    if (!is.null(cache)) {
-        result[dois[(dois %in% cache)]] <- TRUE
-        cache <- c(cache, result[result])
-        cache <- cache[!duplicated(cache)]
-        saveRDS(cache, cache_file)
+    if (length(dois_to_check) == 0) {
+        result[] <- TRUE
+        return(result)
     }
+
+    result_dois_checked <- data.frame(
+        doi = dois_to_check,
+        exists = FALSE
+    )
+
+    total <- nrow(dois_to_check)
+    for (j in seq_along(dois_to_check)) {
+        # Print progress
+        message("\nProgress: ", j, " of ", total, "\n")
+
+        if (!is.na(result_dois_checked$doi[j])) {
+            try({
+                status <- httr2::request(paste0("https://doi.org/", result_dois_checked$doi[j])) |>
+                    httr2::req_headers(
+                        noredirect = TRUE,
+                        type = "URL"
+                    ) |>
+                    httr2::req_throttle(
+                        rate = 30 / 60
+                    ) |>
+                    httr2::req_retry(
+                        max_tries = 5
+                    ) |>
+                    httr2::req_error(
+                        is_error = function(e) {
+                            FALSE
+                        }
+                    ) |>
+                    httr2::req_perform() |>
+                    httr2::resp_status()
+                result_dois_checked$exists[j] <- (status == 200)
+
+                # Save temporary cache
+                if ((!is.null(cache_file)) & (j %% 100 == 0)) {
+                    message("\nSaving temporary cache to ", paste0(cache_file, ".TMP.", j, "\n"))
+                    saveRDS(
+                        result_dois_checked[result_dois_checked$exists, "doi"],
+                        paste0(cache_file, ".TMP.", j)
+                    )
+                }
+            })
+        }
+    }
+
+
+    cache <- c(cache, result_dois_checked$doi[result_dois_checked$exists]) |>
+        unique()
+
+    doi_not_found <- result_dois_checked$doi[!result_dois_checked$exists]
+
+    result[names(result) %in% doi_not_found] <- FALSE
+
+    result[names(result) %in% cache] <- TRUE
+
+    if (!is.null(cache_file)) {
+        cache |>
+            unique() |>
+            saveRDS(file = cache_file)
+    }
+
     return(result)
 }

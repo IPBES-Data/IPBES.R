@@ -9,7 +9,7 @@ doi_exists(dois, cache_file = NULL)
 \arguments{
 \item{dois}{A character vector of DOIs to check.}
 
-\item{cache_file}{A file name of the cache to be used, i.e. the confirmed existing dois. The format is a character vector with the DOIs which exist. If the cache exist, it will be updated at the end.}
+\item{cache_file}{A file name of the cache to be used, i.e. the confirmed existing dois. The format is a character vector with the DOIs which exist. If the cache exist, it will be updated at the end. Temporary caches will be written after 100 checks.}
 }
 \value{
 A named logical vector indicating whether each DOI does exist or not, names are the dois.

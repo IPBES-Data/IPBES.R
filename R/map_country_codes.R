@@ -41,7 +41,7 @@ map_country_codes <- function(
         data <- readRDS(
             system.file(
                 package = "IPBES.R",
-                "spatial", "countrycodes.csv"
+                "spatial", "countrycodes.rds"
             )
         )
         values <- "n"

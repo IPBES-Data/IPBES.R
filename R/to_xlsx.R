@@ -3,9 +3,10 @@
 #' This function takes a snowball object and a filename, and converts the snowball object to an XLSX file.
 #'
 #' @param snowball A snowball object containing the data to be converted.
-#' @param xls_filename The name of the XLSX file to be created.
+#' @param xls_filename If not `\code{NULL} the name of the XLSX file to be created. if \code{NULL} the data
+#' will not be saved in a csv but only returned invisilbly
 #'
-#' @return No return value, called for side effects.
+#' @return Invisibly the \code{data.frame} generated
 #' @export
 #'
 #' @importFrom openalexR snowball2df
@@ -18,7 +19,9 @@
 #' \dontrun{
 #' to_xlsx(snowball, "example.xlsx")
 #' }
-to_xlsx <- function(snowball, xls_filename) {
+to_xlsx <- function(
+    snowball,
+    xls_filename = NULL) {
     flat_snow <- openalexR::snowball2df(snowball)
 
     no_edges <- snowball$edges |>
@@ -205,7 +208,7 @@ to_xlsx <- function(snowball, xls_filename) {
 
     xlsx$abstract[la] <- substr(xlsx$abstract[la], 1, 3000)
 
-    xlsx |>
+    data <- xlsx |>
         dplyr::relocate(cited_global_per_year, .after = cited_global) |>
         dplyr::relocate(no_referenced_works, .after = doi) |>
         dplyr::relocate(no_connections, .before = abstract) |>
@@ -216,6 +219,10 @@ to_xlsx <- function(snowball, xls_filename) {
         dplyr::relocate(concepts_l4, .before = abstract) |>
         dplyr::relocate(concepts_l5, .before = abstract) |>
         dplyr::relocate(author_institute, .before = abstract) |>
-        dplyr::relocate(institute_country, .before = abstract) |>
+        dplyr::relocate(institute_country, .before = abstract)
+    if (!is.null(xls_filename)) {
         writexl::write_xlsx(xls_filename)
+    }
+
+    invisible(data)
 }

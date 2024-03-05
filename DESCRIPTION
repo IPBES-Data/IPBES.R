@@ -1,7 +1,7 @@
 Package: IPBES.R
 Type: Package
 Title: Tool functions used by the Data and Knowledge Technical Support Unit of IPBES
-Version: 0.4.0
+Version: 0.4.2
 Date: 2023-11-13
 Authors@R: 
   c(person(given = "Rainer M.",
@@ -11,8 +11,8 @@ Authors@R:
            comment = c(ORCID = "0000-0001-8049-7069"))
   )
 Maintainer: Rainer M. Krug <Rainer@krugs.de>
-URL: https://github.com/rkrug/IPBES.R, https://rkrug.github.io/IPBES.R/
-BugReports: https://github.com/rkrug/IPBES.R/issues
+URL: https://ipbes-data.github.io/IPBES.R/, https://github.com/ipbes-data/IPBES.R
+BugReports: https://github.com/ipbes-data/IPBES.R/issues
 Description: More about what it does (maybe more than one line).
 License: GPL (>= 2)
 Depends: R (>= 3.5.0)
@@ -29,7 +29,8 @@ Imports:
   tidyterra,
   terra,
   countrycode,
-  geodata
+  geodata,
+  DT
 Suggests: 
     roxyglobals,
     tinytest
