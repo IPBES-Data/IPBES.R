@@ -44,7 +44,7 @@ table_dt <- function(
         "print"
     ),
     scroller = TRUE,
-    scrollY = JS("window.innerHeight * 0.7 + 'px'"),
+    scrollY = DT::JS("window.innerHeight * 0.7 + 'px'"),
     scrollX = TRUE,
     fixedColumns = list(leftColumns = 4),
     escape = FALSE,

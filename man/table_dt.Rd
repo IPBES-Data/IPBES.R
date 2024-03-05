@@ -11,7 +11,7 @@ table_dt(
     fn), list(extend = "pdf", filename = fn, orientation = "landscape", customize =
     DT::JS("function(doc) {", "  doc.defaultStyle.fontSize = 5;", "}")), "print"),
   scroller = TRUE,
-  scrollY = JS("window.innerHeight * 0.7 + 'px'"),
+  scrollY = DT::JS("window.innerHeight * 0.7 + 'px'"),
   scrollX = TRUE,
   fixedColumns = list(leftColumns = 4),
   escape = FALSE,

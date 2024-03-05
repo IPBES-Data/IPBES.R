@@ -79,7 +79,7 @@ plot_snowball_interactive <- function(snowball, key_works, file) {
         Value = "width",
         opacity = 0.9,
         zoom = TRUE,
-        colourScale = JS(ColourScale),
+        colourScale = networkD3::JS(ColourScale),
         fontSize = 20,
         legend = TRUE,
         clickAction = openDOI

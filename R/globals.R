@@ -8,6 +8,19 @@ utils::globalVariables(c(
   "auth_abbr", # <plot_snowball>
   "cairo_pdf", # <plot_snowball>
   "cited_by_count", # <plot_snowball>
+  "Freq", # <to_data_frame>
+  "Var1", # <to_data_frame>
+  "id", # <to_data_frame>
+  "publication_year", # <to_data_frame>
+  "cited_by_count", # <to_data_frame>
+  "years_published", # <to_data_frame>
+  "avg_citations_per_year", # <to_data_frame>
+  "author", # <to_data_frame>
+  "display_name", # <to_data_frame>
+  "doi", # <to_data_frame>
+  "so", # <to_data_frame>
+  "ab", # <to_data_frame>
+  "cited_global", # <to_data_frame>
   "Freq", # <to_xlsx>
   "Var1", # <to_xlsx>
   "id", # <to_xlsx>
