@@ -32,7 +32,7 @@ plot_snowball_interactive <- function(snowball, key_works, file) {
 
     nodes <- data.frame(
         name = snowball$nodes$id,
-        author = IPBES.R::abbreviate_authors(snowball$nodes),
+        author = abbreviate_authors(snowball$nodes),
         doi = snowball$nodes$doi,
         nodesize = snowball$nodes$cited_by_count / (2024 - snowball$nodes$publication_year) * 0.5,
         stringsAsFactors = FALSE

@@ -19,7 +19,7 @@
 to_data_frame <- function(
     snowball) {
     flat_snow <- openalexR::snowball2df(snowball)
-    flat_snow$author <- IPBES.R::abbreviate_authors(flat_snow)
+    flat_snow$author <- abbreviate_authors(flat_snow)
 
     no_edges <- snowball$edges |>
         unlist() |>

@@ -163,15 +163,16 @@
 #' }
 #' @export
 #'
-oa_request_IPBES <- function(query_url,
-                             per_page = 200,
-                             paging = "cursor",
-                             pages = NULL,
-                             count_only = FALSE,
-                             mailto = openalexR:::oa_email(),
-                             api_key = openalexR:::oa_apikey(),
-                             verbose = FALSE,
-                             output_path = NULL) {
+oa_request_IPBES <- function(
+    query_url,
+    per_page = 200,
+    paging = "cursor",
+    pages = NULL,
+    count_only = FALSE,
+    mailto = openalexR:::oa_email(),
+    api_key = openalexR:::oa_apikey(),
+    verbose = FALSE,
+    output_path = NULL) {
     # https://httr.r-lib.org/articles/api-packages.html#set-a-user-agent
     ua <- httr::user_agent("https://github.com/ropensci/openalexR/")
 
@@ -204,6 +205,19 @@ oa_request_IPBES <- function(query_url,
     }
     n_items <- res$meta$count
     n_pages <- ceiling(n_items / per_page)
+
+    if (file.exists(file.path(output_path, "next_page.rds"))) {
+        pn <- readRDS(file.path(output_path, "next_page.rds"))
+        if (is.null(pages)) {
+            message("Resuming download from page ", pn, " ...")
+        } else {
+            stop("`pages` argument incompatible with incom[plete doewnload!")
+        }
+        pages <- seq.int(
+            from = pn,
+            to = n_pages
+        )
+    }
 
     ## number of pages
     if (is.null(pages)) {
@@ -239,39 +253,18 @@ oa_request_IPBES <- function(query_url,
     res <- NULL
     for (i in pages) {
         if (verbose) pb$tick()
-
+        saveRDS(i, file.path(output_path, "next_page.rds"))
+        Sys.sleep(1 / 100)
+        next_page <- openalexR:::get_next_page(paging, i, res)
+        query_ls[[paging]] <- next_page
+        res <- openalexR:::api_request(query_url, ua, query = query_ls)
         if (is.null(output_path)) {
-            Sys.sleep(1 / 100)
-
-            next_page <- openalexR:::get_next_page(paging, i, res)
-            query_ls[[paging]] <- next_page
-            res <- openalexR:::api_request(query_url, ua, query = query_ls)
-
             if (!is.null(res$results)) data[[i]] <- res$results
         } else {
-            if (file.exists(file.path(output_path, "page.rds"))) {
-                i <- readRDS(file.path(output_path, "page.rds"))
-                query_ls <- saveRDS(file.path(output_path, "query_ls.rds"))
-            } else {
-                next_page <- openalexR:::get_next_page(paging, i, res)
-                query_ls[[paging]] <- next_page
-                saveRDS(i, file.path(output_path, "page.rds"))
-                saveRDS(query_ls, file.path(output_path, "query_ls.rds"))
-            }
-            Sys.sleep(1 / 100)
-
-            res <- openalexR:::api_request(query_url, ua, query = query_ls)
-            fn <- file.path(output_path, paste0("page_", i, ".rds"))
-            if (!file.exists(fn)) {
-                saveRDS(res, fn)
-            } else {
-                stop("There is inconsistency in the output path. The file ", fn, " already exists.\n", "Please empty the output path and try again.")
-            }
-
-            unlink(file.path(output_path, "query_ls.rds"))
-            unlink(file.path(output_path, "page.rds"))
+            saveRDS(res, file.path(output_path, paste0("page_", i, ".rds")))
         }
     }
+    unlink(file.path(output_path, "next_page.rds"))
 
     if (is.null(output_path)) {
         return(unlist(data, recursive = FALSE))

@@ -22,7 +22,7 @@
 #' }
 plot_snowball <- function(snowball, name, path = "figures") {
     snowball$nodes$cited_by_count_by_year <- snowball$nodes$cited_by_count / (2024 - snowball$nodes$publication_year)
-    snowball$nodes$auth_abbr <- IPBES.R::abbreviate_authors(snowball$nodes)
+    snowball$nodes$auth_abbr <- abbreviate_authors(snowball$nodes)
 
     ### Size cited_by_count_by_year
     p_cby <- snowball |>
