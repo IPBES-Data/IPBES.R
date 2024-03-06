@@ -8,6 +8,16 @@ We try to limit this, but it can not be guaranteed.
 
 ## News
 
+### v0.4.3
+
+#### added features
+
+- `get_corpus()` function to download larger corpi. The function recovers after a crash and continues from there.
+
+### 
+
+Quite some changes...
+
 ### v0.2.9
 
 #### added feature
