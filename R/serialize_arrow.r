@@ -17,12 +17,12 @@ serialize_arrow <- function(data) {
         mutate(
             topics = ifelse(
                 is.na(topics),
-                NA,
+                as.character(NA),
                 purrr::map_chr(topics, ~ serialize(.x, NULL) |> base64enc::base64encode())
             ),
             author = ifelse(
                 is.na(author),
-                NA,
+                as.character(NA),
                 purrr::map_chr(author, ~ serialize(.x, NULL) |> base64enc::base64encode())
             )
         )
