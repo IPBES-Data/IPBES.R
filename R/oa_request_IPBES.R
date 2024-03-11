@@ -206,19 +206,6 @@ oa_request_IPBES <- function(
     n_items <- res$meta$count
     n_pages <- ceiling(n_items / per_page)
 
-    if (file.exists(file.path(output_path, "next_page.rds"))) {
-        pn <- readRDS(file.path(output_path, "next_page.rds"))
-        if (is.null(pages)) {
-            message("Resuming download from page ", pn, " ...")
-        } else {
-            stop("`pages` argument incompatible with incom[plete doewnload!")
-        }
-        pages <- seq.int(
-            from = pn,
-            to = n_pages
-        )
-    }
-
     ## number of pages
     if (is.null(pages)) {
         pages <- seq.int(n_pages)

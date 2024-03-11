@@ -53,8 +53,8 @@ get_corpus <- function(select = c(
         verbose = verbose
     )$key
 
-    years <- part[
-        !(part %in%
+    years <- years[
+        !(years %in%
             (
                 list.files(
                     path = arrow_directory,
