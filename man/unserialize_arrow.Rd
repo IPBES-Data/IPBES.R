@@ -4,18 +4,14 @@
 \alias{unserialize_arrow}
 \title{Unserialize Arrow}
 \usage{
-unserialize_arrow(data)
+unserialize_arrow(x)
 }
 \arguments{
-\item{data}{A data frame containing serialized 'topics' and 'author' columns.}
+\item{x}{A character vector containing serialized values, at the moment 'topics' and 'author' columns.}
 }
 \value{
-A modified data frame with unserialized 'topics' and 'author' columns.
+A vector of lists containing the unseerialu=ized data
 }
 \description{
-This function unserializes the 'topics' and 'author' columns of a data frame using base64 decoding.
-}
-\examples{
-data <- data.frame(topics = list("dHlwZTE=", "dHlwZTI="), author = list("YXV0aG9yMQ==", "YXV0aG9yMg=="))
-unserialize_arrow(data)
+This function unserializes the vector `x` and returns a vector containing the extracted values.
 }
