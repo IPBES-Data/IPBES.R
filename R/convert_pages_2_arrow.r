@@ -86,29 +86,49 @@ convert_pages_2_arrow <- function(
             data <- parallel::mclapply(
                 pages,
                 function(page) {
-                    p <- readRDS(file.path(page))$results |>
+                    data <- readRDS(file.path(page))$results |>
                         openalexR::works2df(verbose = FALSE)
-                    p$author_abbr <- IPBES.R::abbreviate_authors(p)
-                    return(p)
+
+                    data$author_abbr <- IPBES.R::abbreviate_authors(data)
+                    data$page <- page |>
+                        basename() |>
+                        gsub(pattern = "^page_", replacement = "") |>
+                        gsub(pattern = ".rds$", replacement = "")
+
+                    data <- serialize_arrow(data)
+
+
+                    arrow::write_dataset(
+                        data,
+                        path = arrow_dir,
+                        partitioning = c("publication_year", "page"),
+                        format = "parquet",
+                        existing_data_behavior = "overwrite"
+                    )
+
+                    # p <- readRDS(file.path(page))$results |>
+                    #     openalexR::works2df(verbose = FALSE)
+                    # p$author_abbr <- IPBES.R::abbreviate_authors(p)
+                    # return(p)
                 },
                 mc.cores = mc_cores
-            ) |>
-                do.call(what = rbind)
+            ) # |>
+            #     do.call(what = rbind)
 
-            saveRDS(
-                data,
-                file = file.path(paste0(year, ".rds"))
-            )
+            # saveRDS(
+            #     data,
+            #     file = file.path(paste0(year, ".rds"))
+            # )
 
-            data <- serialize_arrow(data)
+            # data <- serialize_arrow(data)
 
-            arrow::write_dataset(
-                data,
-                path = arrow_dir,
-                partitioning = "publication_year",
-                format = "parquet",
-                existing_data_behavior = "overwrite"
-            )
+            # arrow::write_dataset(
+            #     data,
+            #     path = arrow_dir,
+            #     partitioning = "publication_year",
+            #     format = "parquet",
+            #     existing_data_behavior = "overwrite"
+            # )
         }
     )
 }

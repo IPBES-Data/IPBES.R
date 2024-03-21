@@ -9,8 +9,8 @@
 #'
 #' @return A corpus object.
 #' @examples
-#' get_corpus("data/corpus/")
-read_corpus <- function(
+#' arrow_get_corpus("data/corpus/")
+arrow_read_corpus <- function(
     path = file.path("data", "corpus"),
     unify_schemas = FALSE) {
     con <- arrow::open_dataset(
@@ -19,3 +19,12 @@ read_corpus <- function(
     )
     return(con)
 }
+
+#' Alias to arrow_read_corpus
+#'
+#' @description This function is an alias to \code{\link{arrow_read_corpus}}.
+#' For more details, see the documentation for \code{\link{arrow_read_corpus}}.
+#'
+#' @rdname arrow_read_corpus
+#' @export
+read_corpus <- arrow_read_corpus
