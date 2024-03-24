@@ -8,7 +8,6 @@
 #'
 #' @export
 #'
-#' @examples
 unserialize_arrow <- function(x) {
     result <- vector("list", length(x))
 

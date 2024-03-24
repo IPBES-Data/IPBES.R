@@ -10,6 +10,7 @@
 #' @param continue Logical indicating whether to continue downloading from where it left off. Default is TRUE.
 #' @param delete_pages_dir Logical indicating whether to delete the pages directory before downloading.
 #'   Default is FALSE.
+#' @param set_size The number of works to be downloaded in each set. Default is 1000.
 #' @param verbose Logical indicating whether to display progress messages. Default is TRUE.
 #' @param mc_cores The number of cores to be used for parallel processing. Default is 3.
 #'   This is limiting the number of parallel downloads
@@ -22,11 +23,12 @@
 #' \dontrun{
 #' download_corpus(title_and_abstract_search = "climate change")
 #' }
-download_corpus <- function(
+corpus_download <- function(
     pages_dir = file.path(".", "data", "pages"),
     title_and_abstract_search,
     continue = TRUE,
     delete_pages_dir = FALSE,
+    set_size = 1000,
     verbose = TRUE,
     mc_cores = 3
     #
@@ -81,9 +83,8 @@ download_corpus <- function(
 
         years <- years[!(years %in% completed)]
     }
-
     pbmcapply::pbmclapply(
-        sample(years),
+        years,
         function(y) {
             if (verbose) {
                 message("Getting data for year ", y, " ...")
@@ -97,31 +98,48 @@ download_corpus <- function(
                 recursive = TRUE
             )
 
-            invisible(
-                openalexR::oa_query(
-                    title_and_abstract.search = compact(title_and_abstract_search),
-                    publication_year = y,
-                    options = list(
-                        select = c(
-                            "id",
-                            "doi",
-                            "authorships",
-                            "publication_year",
-                            "title",
-                            "abstract_inverted_index", "
-                            topics"
-                        )
-                    ),
-                    verbose = FALSE
-                ) |>
-                    IPBES.R::oa_request_IPBES(
-                        count_only = FALSE,
-                        output_path = output_path,
-                        verbose = TRUE
+            oar <- openalexR::oa_query(
+                title_and_abstract.search = compact(title_and_abstract_search),
+                publication_year = y,
+                options = list(
+                    select = c(
+                        "id",
+                        "doi",
+                        "authorships",
+                        "publication_year",
+                        "title",
+                        "abstract_inverted_index",
+                        "topics"
                     )
+                )
+            ) |>
+                oa_generate(
+                    verbose = verbose
+                )
+
+            set <- vector("list", set_size)
+            set_index <- 0
+            set_no <- 0
+
+            coro::loop(
+                for (x in oar) {
+                    set_index <- set_index + 1
+                    set[[set_index]] <- x
+                    if ((set_index >= set_size) | isTRUE(x == coro::exhausted())) {
+                        saveRDS(set, file.path(output_path, paste0("set_", set_no, ".rds")))
+                        set <- vector("list", set_size) # reset recs
+                        set_index <- 0
+                        set_no <- set_no + 1
+                    }
+                    set_index <- set_index + 1
+                }
             )
+            ### and save the last one
+            set <- set[-(set_index:set_size)]
+            saveRDS(set, file.path(output_path, paste0("set_", set_no, ".rds")))
         },
         mc.cores = mc_cores,
         mc.preschedule = FALSE
-    )
+    ) |>
+        invisible()
 }

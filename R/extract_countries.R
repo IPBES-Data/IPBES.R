@@ -22,7 +22,7 @@
 #'
 #' @md
 
-extract_authors <- function(
+extract_countries <- function(
     authors,
     first_only = TRUE) {
     sapply(
