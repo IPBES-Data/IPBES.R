@@ -79,34 +79,30 @@ corpus_pages_to_arrow <- function(
             if (verbose) {
                 message("\n     Processing year ", year, " ...\n")
             }
-            pages <- list.files(
+            sets <- list.files(
                 path = year,
-                pattern = "^page_",
+                pattern = "^set_",
                 full.names = TRUE,
                 recursive = TRUE
             )
             data <- parallel::mclapply(
-                pages,
-                function(page) {
-                    data <- readRDS(file.path(page))$results |>
+                sets,
+                function(set) {
+                    data <- readRDS(file.path(set)) |>
                         openalexR::works2df(verbose = FALSE)
 
                     data$author_abbr <- IPBES.R::abbreviate_authors(data)
-                    data$page <- page |>
+                    data$set <- set |>
                         basename() |>
-                        gsub(pattern = "^page_", replacement = "") |>
+                        gsub(pattern = "^set_", replacement = "") |>
                         gsub(pattern = ".rds$", replacement = "")
 
                     data <- serialize_arrow(data)
 
-                    # for  (i in 1:nrow(data)) {
-                    #     data$author[[i]]["au_orcid"] <- as.character(data$author[[i]]["au_orcid"])
-                    # }
-
                     arrow::write_dataset(
                         data,
                         path = arrow_dir,
-                        partitioning = c("publication_year", "page"),
+                        partitioning = c("publication_year", "set"),
                         format = "parquet",
                         existing_data_behavior = "overwrite"
                     )
@@ -114,5 +110,6 @@ corpus_pages_to_arrow <- function(
                 mc.cores = mc_cores
             )
         }
-    )
+    ) |>
+        invisible()
 }

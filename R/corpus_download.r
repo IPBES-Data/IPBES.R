@@ -117,25 +117,22 @@ corpus_download <- function(
                     verbose = verbose
                 )
 
-            set <- vector("list", set_size)
-            set_index <- 0
+            # set <- vector("list", set_size)
+            set <- NULL
             set_no <- 0
 
             coro::loop(
                 for (x in oar) {
-                    set_index <- set_index + 1
-                    set[[set_index]] <- x
-                    if ((set_index >= set_size) | isTRUE(x == coro::exhausted())) {
+                    set <- c(set, list(x))
+                    if ((length(set) >= set_size) | isTRUE(x == coro::exhausted())) {
                         saveRDS(set, file.path(output_path, paste0("set_", set_no, ".rds")))
-                        set <- vector("list", set_size) # reset recs
-                        set_index <- 0
+                        # set <- vector("list", set_size) # reset recs
+                        set <- list()
                         set_no <- set_no + 1
                     }
-                    set_index <- set_index + 1
                 }
             )
             ### and save the last one
-            set <- set[-(set_index:set_size)]
             saveRDS(set, file.path(output_path, paste0("set_", set_no, ".rds")))
         },
         mc.cores = mc_cores,
