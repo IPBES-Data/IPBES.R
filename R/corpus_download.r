@@ -60,18 +60,18 @@ corpus_download <- function(
             recursive = FALSE
         ) |>
             gsub(
-                pattern = paste0("^pages_publication_year=", ""),
+                pattern = paste0("^set_publication_year=", ""),
                 replacement = ""
             )
 
         interrupted <- list.files(
             path = pages_dir,
-            pattern = "^next_page.rds",
+            pattern = "00_in_Progress_00",
             full.names = TRUE,
             recursive = TRUE
         ) |>
             gsub(
-                pattern = paste0("^", pages_dir, "/pages_publication_year=", ""),
+                pattern = paste0("^", pages_dir, "/set_publication_year=", ""),
                 replacement = ""
             ) |>
             gsub(
@@ -90,7 +90,7 @@ corpus_download <- function(
                 message("Getting data for year ", y, " ...")
             }
 
-            output_path <- file.path(pages_dir, paste0("pages_publication_year=", y))
+            output_path <- file.path(pages_dir, paste0("set_publication_year=", y))
 
             dir.create(
                 path = output_path,
@@ -121,6 +121,7 @@ corpus_download <- function(
             set <- NULL
             set_no <- 0
 
+            file.create(file.path(output_path, "00_in_Progress_00"))
             coro::loop(
                 for (x in oar) {
                     set <- c(set, list(x))
@@ -134,6 +135,7 @@ corpus_download <- function(
             )
             ### and save the last one
             saveRDS(set, file.path(output_path, paste0("set_", set_no, ".rds")))
+            unlink(file.path(output_path, "00_in_Progress_00"))
         },
         mc.cores = mc_cores,
         mc.preschedule = FALSE
