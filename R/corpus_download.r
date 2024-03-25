@@ -121,7 +121,7 @@ corpus_download <- function(
             set <- NULL
             set_no <- 0
 
-            file.create(file.path(output_path, "00_in_Progress_00"))
+            file.create(file.path(output_path, "00_in_progress_00"))
             coro::loop(
                 for (x in oar) {
                     set <- c(set, list(x))
@@ -135,7 +135,11 @@ corpus_download <- function(
             )
             ### and save the last one
             saveRDS(set, file.path(output_path, paste0("set_", set_no, ".rds")))
-            unlink(file.path(output_path, "00_in_Progress_00"))
+            file.create(file.path(output_path, "00_complete_00"))
+            file.rename(
+                file.path(output_path, "00_in_progress_00"),
+                file.path(output_path, "00_complete_00")
+            )
         },
         mc.cores = mc_cores,
         mc.preschedule = FALSE
