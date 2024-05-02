@@ -11,6 +11,7 @@ corpus_download(
   delete_pages_dir = FALSE,
   set_size = 1000,
   verbose = TRUE,
+  dry_run = FALSE,
   mc_cores = 3
 )
 }
@@ -27,6 +28,8 @@ Default is FALSE.}
 \item{set_size}{The number of works to be downloaded in each set. Default is 1000.}
 
 \item{verbose}{Logical indicating whether to display progress messages. Default is TRUE.}
+
+\item{dry_run}{Logical indicating whether to run the function without downloading any data. Default is FALSE.}
 
 \item{mc_cores}{The number of cores to be used for parallel processing. Default is 3.
 This is limiting the number of parallel downloads}

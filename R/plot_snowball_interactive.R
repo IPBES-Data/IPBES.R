@@ -9,8 +9,8 @@
 #' @param file The file name to save the network to. TThe directory has tro esxist.
 #'   Default: `NULL`, i.e. not saved.
 #'
-#' @importFrom networkD3 forceNetwork JS
-#'
+#' @importFrom networkD3 forceNetwork
+#' @importFrom DT JS
 #' @importFrom dplyr mutate select rename left_join
 #'
 #' @return A networkD3 object representing the interactive network plot.
@@ -79,7 +79,7 @@ plot_snowball_interactive <- function(snowball, key_works, file) {
         Value = "width",
         opacity = 0.9,
         zoom = TRUE,
-        colourScale = networkD3::JS(ColourScale),
+        colourScale = DT::JS(ColourScale),
         fontSize = 20,
         legend = TRUE,
         clickAction = openDOI

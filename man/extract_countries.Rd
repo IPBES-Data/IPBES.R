@@ -4,16 +4,23 @@
 \alias{extract_countries}
 \title{Extract authors' institution country codes}
 \usage{
-extract_countries(authors, first_only = TRUE)
+extract_countries(authors, first_only = TRUE, return_all = FALSE)
 }
 \arguments{
 \item{authors}{A data frame containing authors' information, including the institution country codes.}
 
 \item{first_only}{A logical value indicating whether to extract only the first author's institution country code
 or for all authors. Default is TRUE.}
+
+\item{return_all}{A logical value indicating whether to return all authors' institution country codes.
+The order correponds to the initial vector. Missing countries are \code{NA}. Default is FALSE.}
 }
 \value{
-A vector of institution country codes corresponding to the authors.
+A `data.frame with two columns:
+\itemize{
+\item \code{cc}: the country code
+\item \code{weight}: the weight of the country code, i.e. \verb{1/number of authors}. 1 if \code{first_author} is `TRUE``.
+}
 }
 \description{
 This function extracts the institution country codes of authors from a given data frame.
@@ -27,6 +34,6 @@ authors <- data.frame(
     institution_country_code = c("US", "UK", "DE"),
     stringsAsFactors = FALSE
 )
-extract_authors(authors)
+extract_countries(authors)
 
 }

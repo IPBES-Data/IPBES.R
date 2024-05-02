@@ -3,14 +3,19 @@
 #' This function opens a dataset from a specified path and returns a corpus object.
 #'
 #' @param path The path to the dataset.
+#' @param unify_schemas Logical indicating whether to unify the schemas of the datasets.
+#'   `TRUE` is the safer option, but takes more time to read the first time,Default is FALSE.
 #' @importFrom arrow open_dataset
 #'
 #' @export
 #'
 #' @return A corpus object.
+#'
+#' @md
+#'
 #' @examples
-#' arrow_get_corpus("data/corpus/")
-arrow_read_corpus <- function(
+#' corpus_read("data/corpus/")
+corpus_read <- function(
     path = file.path("data", "corpus"),
     unify_schemas = FALSE) {
     con <- arrow::open_dataset(
@@ -27,4 +32,4 @@ arrow_read_corpus <- function(
 #'
 #' @rdname arrow_read_corpus
 #' @export
-read_corpus <- arrow_read_corpus
+read_corpus <- corpus_read

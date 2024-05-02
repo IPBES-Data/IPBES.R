@@ -96,12 +96,8 @@ corpus_pages_to_arrow <- function(
                 data <- parallel::mclapply(
                     sets,
                     function(set) {
-                        data <- readRDS(file.path(set))
-                        # Fix download of `openalexR::works2df()` unsupported `title` field
-                        for (i in 1:length(data)) {
-                            names(data[[i]])[names(data[[i]]) == "title"] <- "display_name"
-                        }
-                        data <- openalexR::works2df(data, verbose = FALSE)
+                        data <- readRDS(file.path(set)) |>
+                            openalexR::works2df(verbose = FALSE)
 
                         data$author_abbr <- IPBES.R::abbreviate_authors(data)
 
@@ -110,54 +106,46 @@ corpus_pages_to_arrow <- function(
                             gsub(pattern = "^set_", replacement = "") |>
                             gsub(pattern = ".rds$", replacement = "")
 
-                        ### Data cleaning
+                        # serialize_arrow(data) |>
+                        suppressWarnings({
+                            if (is.null(data$id)) {
+                                data$id <- as.character(NA)
+                            } else {
+                                data$id <- as.character(data$id)
+                            }
+                            if (is.null(data$title)) {
+                                data$title <- as.character(NA)
+                            } else {
+                                data$title <- as.character(data$title)
+                            }
+                            if (is.null(data$ab)) {
+                                data$ab <- as.character(NA)
+                            } else {
+                                data$ab <- as.character(data$ab)
+                            }
+                            if (is.null(data$author_abbr)) {
+                                data$author_abbr <- as.character(NA)
+                            } else {
+                                data$author_abbr <- as.character(data$author_abbr)
+                            }
+                            if (is.null(data$publication_year)) {
+                                data$publication_year <- as.character(NA)
+                            } else {
+                                data$publication_year <- as.integer(data$publication_year)
+                            }
+                            if (is.null(data$doi)) {
+                                data$doi <- as.character(NA)
+                            } else {
+                                data$doi <- as.character(data$doi)
+                            }
+                        })
 
-                        if (is.null(data$doi)) {
-                            data$doi <- as.character(NA)
-                        } else {
-                            data$doi <- as.character(data$doi)
-                        }
-                        #
-                        data$publication_year <- as.integer(data$publication_year)
-                        if (is.null(data$ab)) {
-                            data$ab <- as.character(NA)
-                        }
-                        #
-                        if (is.null(data$id)) {
-                            data$id <- as.character(NA)
-                        } else {
-                            data$id <- as.character(data$id)
-                        }
-                        #
-                        if (is.null(data$display_name)) {
-                            data$display_name <- as.character(NA)
-                        } else {
-                            data$display_name <- as.character(data$display_name)
-                        }
-                        #
-                        if (is.null(data$ab)) {
-                            data$ab <- as.character(NA)
-                        } else {
-                            data$ab <- as.character(data$ab)
-                        }
-                        #
-                        if (is.null(data$author_abbr)) {
-                            data$author_abbr <- as.character(NA)
-                        } else {
-                            data$author_abbr <- as.character(data$author_abbr)
-                        }
-                        #
-                        #
-                        #
-                        ####
-                        ####  Templates definition
-                        ####
                         author_template <- data.frame(
                             au_id = as.character(NA),
                             au_display_name = as.character(NA),
                             au_orcid = as.character(NA),
                             author_position = as.character(NA),
-                            is_corresponding = as.logical(NA),
+                            is_corresponding = as.character(NA),
                             au_affiliation_raw = as.character(NA),
                             institution_id = as.character(NA),
                             institution_display_name = as.character(NA),
@@ -166,73 +154,56 @@ corpus_pages_to_arrow <- function(
                             institution_type = as.character(NA),
                             institution_lineage = as.character(NA)
                         )
-                        #
+
+                        i <- sapply(
+                            data$author,
+                            function(x) {
+                                inherits(x, "logical")
+                            }
+                        )
+
+                        data$author[i] <- list(author_template)
+
+                        ## Thanks Martin Morgan - https://ropensci.slack.com/archives/C026GCWKC/p1711466000083759?thread_ts=1711463020.971399&cid=C026GCWKC
+                        ## what is the 'skeleton' of the original data?
+                        lengths <- vapply(data$author, NROW, integer(1))
+                        groups <- rep(seq_along(data$author), lengths)
+                        ## row bind to a single data.frame...
+                        unlisted <- do.call(rbind, data$author)
+                        ## transform each column with a single `as.character()`
+                        unlisted[] <- lapply(unlisted, as.character)
+                        ## recreate original data structure
+                        data$author <- split(unlisted, groups)
+
+
+                        i <- sapply(
+                            data$topics, function(x) {
+                                inherits(x, "logical")
+                            }
+                        )
+
                         topics_template <- data.frame(
-                            i = as.integer(NA),
+                            i = as.character(NA),
                             score = as.numeric(NA),
                             name = as.character(NA),
                             id = as.character(NA),
                             display_name = as.character(NA)
                         )
-                        ####
-                        #### authors
-                        ####
-                        i_a <- sapply(data$author, is.logical)
-                        data$author[i_a] <- list(author_template)
 
-                        data$author[!i_a] <- lapply(
-                            data$author[!i_a],
-                            function(x) {
-                                x |>
-                                    dplyr::mutate(
-                                        au_id = as.character(au_id),
-                                        au_display_name = as.character(au_display_name),
-                                        au_orcid = as.character(au_orcid),
-                                        author_position = as.character(author_position),
-                                        is_corresponding = as.logical(is_corresponding),
-                                        au_affiliation_raw = as.character(au_affiliation_raw),
-                                        institution_id = as.character(institution_id),
-                                        institution_display_name = as.character(institution_display_name),
-                                        institution_ror = as.character(institution_ror),
-                                        institution_country_code = as.character(institution_country_code),
-                                        institution_type = as.character(institution_type),
-                                        institution_lineage = as.character(institution_lineage)
-                                    )
-                            }
-                        )
+                        data$topics[i] <- list(topics_template)
 
-                        ####
-                        #### topics
-                        ####
+                        topic_classes <- lapply(topics_template, class)
 
-                        i_t <- sapply(
-                            data$topics,
-                            function(x) {
-                                is.logical(x) | length(x) == 0
-                            }
-                        )
-                        data$topics[i_t] <- list(topics_template)
-
-                        data$topics[!i_t] <- lapply(
-                            data$topics[!i_t],
-                            function(x) {
-                                x |>
-                                    dplyr::mutate(
-                                        i = as.integer(i),
-                                        score = as.numeric(score),
-                                        dplyr::across(
-                                            c(
-                                                name,
-                                                id,
-                                                display_name
-                                            ),
-                                            as.character
-                                        )
-                                    )
-                            }
-                        )
-
-                        # data <- serialize_arrow(data)
+                        ## what is the 'skeleton' of the original data?
+                        lengths <- vapply(data$topics, NROW, integer(1))
+                        groups <- rep(seq_along(data$topics), lengths)
+                        ## row bind to a single data.frame...
+                        unlisted <- do.call(rbind, data$topics)
+                        ## apply approppriate classes to columns
+                        column_classes <- vapply(topics_template, class, character(1))
+                        unlisted[] <- Map(as, unlisted, column_classes)
+                        ## recreate original data structure
+                        data$topics <- split(unlisted, groups)
 
                         data |>
                             arrow::write_dataset(

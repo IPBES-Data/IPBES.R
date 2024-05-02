@@ -9,3 +9,5 @@
 ^pkgdown$
 ^\.github$
 ^Readme.md$
+^data$
+^\.httr-oauth$
