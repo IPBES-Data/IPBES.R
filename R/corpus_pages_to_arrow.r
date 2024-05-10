@@ -183,6 +183,9 @@ corpus_pages_to_arrow <- function(
                         data$author[!i_a] <- lapply(
                             data$author[!i_a],
                             function(x) {
+                                if (is.null(x$au_affiliation_raw)) {
+                                    x$au_affiliation_raw <- as.character(NA)
+                                }
                                 x |>
                                     dplyr::mutate(
                                         au_id = as.character(au_id),

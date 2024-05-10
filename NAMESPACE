@@ -3,6 +3,7 @@
 export(abbreviate_authors)
 export(compact)
 export(corpus_download)
+export(corpus_download_set)
 export(corpus_filter_ids)
 export(corpus_pages_to_arrow)
 export(corpus_read)

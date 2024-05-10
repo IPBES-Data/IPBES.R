@@ -10,10 +10,7 @@
 #' @param continue Logical indicating whether to continue downloading from where it left off. Default is TRUE.
 #' @param delete_pages_dir Logical indicating whether to delete the pages directory before downloading.
 #'   Default is FALSE.
-#' @param select_fields A character vector of fields to be selected from the downloaded data. The fields
-#'  included in the default are
-#'  `id`, `doi`, `authorships`, `publication_year`, `display_name`, `abstract_inverted_index`, and `topics`.
-#'  These are needed to use the function `corpuus_pages_to_arrow()`.
+#' @param set_size The number of works to be downloaded in each set. Default is 1000.
 #' @param verbose Logical indicating whether to display progress messages. Default is TRUE.
 #' @param dry_run Logical indicating whether to run the function without downloading any data. Default is FALSE.
 #' @param mc_cores The number of cores to be used for parallel processing. Default is 3.
@@ -27,28 +24,17 @@
 #' \dontrun{
 #' download_corpus(title_and_abstract_search = "climate change")
 #' }
-corpus_download <- function(
+corpus_download_set <- function(
     pages_dir = file.path(".", "data", "pages"),
     title_and_abstract_search,
     continue = TRUE,
     delete_pages_dir = FALSE,
-    select_fields = c(
-        "id",
-        "doi",
-        "authorships",
-        "publication_year",
-        "display_name",
-        "abstract_inverted_index",
-        "topics"
-    ),
+    set_size = 1000,
     verbose = TRUE,
     dry_run = FALSE,
     mc_cores = 3
     #
     ) {
-    if (!require(openalexR.IPBES)) {
-        stop("This function requires the custo mised package `openalexR.IPBES`. Aborting!")
-    }
     if (delete_pages_dir) {
         unlink(
             pages_dir,
@@ -110,7 +96,7 @@ corpus_download <- function(
             years,
             function(y) {
                 if (verbose) {
-                    message("\nGetting data for year ", y, " ...")
+                    message("Getting data for year ", y, " ...")
                 }
 
                 output_path <- file.path(pages_dir, paste0("set_publication_year=", y))
@@ -121,21 +107,44 @@ corpus_download <- function(
                     recursive = TRUE
                 )
 
-                file.create(file.path(output_path, "00_in_progress_00"))
-
-                openalexR::oa_query(
+                oar <- openalexR::oa_query(
                     title_and_abstract.search = compact(title_and_abstract_search),
                     publication_year = y,
                     options = list(
-                        select = select_fields
+                        select = c(
+                            "id",
+                            "doi",
+                            "authorships",
+                            "publication_year",
+                            "display_name",
+                            "abstract_inverted_index",
+                            "topics"
+                        )
                     )
                 ) |>
-                    openalexR.IPBES::oa_request(
-                        output_pages_to = output_path,
-                        pages_save_function = saveRDS,
+                    oa_generate(
                         verbose = verbose
                     )
 
+                # set <- vector("list", set_size)
+                set <- NULL
+                set_no <- 0
+
+                file.create(file.path(output_path, "00_in_progress_00"))
+                coro::loop(
+                    for (x in oar) {
+                        set <- c(set, list(x))
+                        if ((length(set) >= set_size) | isTRUE(x == coro::exhausted())) {
+                            saveRDS(set, file.path(output_path, paste0("set_", set_no, ".rds")))
+                            # set <- vector("list", set_size) # reset recs
+                            set <- list()
+                            set_no <- set_no + 1
+                        }
+                    }
+                )
+                ### and save the last one
+                saveRDS(set, file.path(output_path, paste0("set_", set_no, ".rds")))
+                file.create(file.path(output_path, "00_complete_00"))
                 file.rename(
                     file.path(output_path, "00_in_progress_00"),
                     file.path(output_path, "00_complete_00")
