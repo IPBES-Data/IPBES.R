@@ -19,12 +19,18 @@
 #'
 #' @export
 doi_valid <- function(dois) {
-    ## regex <- "^10\\.\\d{4,9}/[-._;()/:A-Z0-9]+$" # https://github.com/libscie/retractcheck/blob/23f1e5c7d572d9470583288d951d1bad98392f82/R/utils.R#L16
-    regex <- "\\b(10[.][0-9]{4,}(?:[.][0-9]+)*/(?:(?![\"&\'<>])\\S)+)\\b" # https://github.com/ropensci-archive/rorcid/blob/master/R/check_dois.R
+    regex <- "^10\\.\\d{4,9}/[-._;()/:A-Z0-9]+$" # https://github.com/libscie/retractcheck/blob/23f1e5c7d572d9470583288d951d1bad98392f82/R/utils.R#L16
+    ## regex <- "\\b(10[.][0-9]{4,}(?:[.][0-9]+)*/(?:(?![\"&\'<>])\\S)+)\\b" # https://github.com/ropensci-archive/rorcid/blob/master/R/check_dois.R
     result <- grepl(
         x = dois, pattern = regex,
         perl = TRUE, ignore.case = TRUE
     )
     names(result) <- dois
+    result <- result & !(grepl(
+        x = dois,
+        pattern = " ",
+        perl = TRUE,
+        ignore.case = TRUE
+    ))
     return(result)
 }
