@@ -21,3 +21,13 @@ oa_snapshot_to_arrow(
 \description{
 This function converts the OA (openalex) snapshot data to Arrow format.
 }
+\examples{
+\dontrun{
+# Convert all data sets in the default snapshot directory
+oa_snapshot_to_arrow()
+
+# Convert specific data sets in a custom snapshot directory
+oa_snapshot_to_arrow(snapshot_dir = "/path/to/snapshot", data_sets = c("data_set1", "data_set2"))
+}
+
+}

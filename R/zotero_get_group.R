@@ -1,0 +1,135 @@
+#' Get Zotero Group Data
+#'
+#' This function retrieves data from a Zotero group using the Zotero API.
+#'
+#' This function uses the Zotero API to retrieve data from a Zotero group. It downloads the data in CSV format
+#' and saves it to a file specified by the `file`` parameter. The function retrieves the data in batches of 100
+#' records at a time and appends them to the file. If `overwrite`` is set to `TRUE``, an existing file with
+#' the same name will be overwritten. The function also provides options to return the data as a data frame and delete
+#' the file after retrieving the data.
+#'
+#' For further information on the API see h[ttps://www.zotero.org/support/dev/web_api/v3/start](https://www.zotero.org/support/dev/web_api/v3/start).
+#' Note: To use this function, you need to have the \pkg{httr2} and \pkg{stringr} packages installed.
+#'
+#' @param group_id The ID of the Zotero group.
+#' @param file The file path to save the retrieved data.
+#' @param overwrite Logical indicating whether to overwrite an existing file with the same name.
+#' @param return_data Logical indicating whether to return the data as a data frame.
+#' @param delete_file Logical indicating whether to delete the file after retrieving the data.
+#'
+#' @importFrom httr2 request req_headers req_url_query req_perform resp_headers resp_body_string
+#' @importFrom utils read.csv write.table
+#'
+#' @return If `return_data`` is` TRUE`, the function returns a data frame containing the retrieved data.
+#'   Otherwise, it returns the file path where the data is saved.
+#'
+#' @examples
+#' # Retrieve data from Zotero group with ID 2352922 (IPBES IAS Assessment Bibliograhy) and save it
+#' # in the file named "zotero_data.csv"
+#'
+#' zotero_get_group(2352922, "zotero_data.csv")
+#'
+#' # Retrieve the same data and return it as a as a data frame. The csv file is deleted.
+#'
+#' data <- zotero_get_group(2352922, return_data = TRUE, delete_file = TRUE)
+#'
+#' @md
+#'
+#' @export
+zotero_get_group <- function(
+    group_id = 2352922,
+    file = tempfile(fileext = ".csv"),
+    overwrite = FALSE,
+    return_data = FALSE,
+    delete_file = FALSE) {
+    ##
+    if (file.exists(file)) {
+        if (overwrite) {
+            message("Overwriting existing file ", file)
+            unlink(file)
+        } else {
+            stop("File ", file, " already exists and would be overwritten!")
+        }
+    }
+
+    api_endpoint <- "https://api.zotero.org/"
+
+    url <- paste0(
+        api_endpoint,
+        "groups/", group_id, "/",
+        "items"
+    )
+
+    req <- url |>
+        httr2::request() |>
+        req_retry(
+            is_transient = function(...) {
+                return(TRUE)
+            }
+        )
+
+    req <- req |>
+        httr2::req_headers(
+            "Zotero-API-Version" = 3
+        )
+
+    req <- req |>
+        httr2::req_url_query(
+            "format" = "csv",
+            "limit" = 100,
+            "start" = 0
+        )
+
+    next_start <- 0
+
+    repeat {
+        message("Downloading 100 records starting at record ", next_start, " ...")
+        req <- req |>
+            httr2::req_url_query(
+                "start" = next_start
+            )
+
+        resp <- req |>
+            httr2::req_perform()
+
+        next_start <- resp |>
+            httr2::resp_headers(filter = "link") |>
+            as.character() |>
+            strsplit(split = "\",") |>
+            unlist() |>
+            grep(pattern = "\"next", value = TRUE) |>
+            gsub(pattern = ".*start=([0-9]+).*", replacement = "\\1")
+
+        if (length(next_start) == 0) {
+            break()
+        }
+
+        resp |>
+            httr2::resp_body_string() |>
+            textConnection() |>
+            read.csv() |>
+            write.table(
+                file = file,
+                append = file.exists(file),
+                quote = TRUE,
+                sep = ",",
+                dec = ".",
+                qmethod = "double",
+                row.names = FALSE,
+                col.names = !file.exists(file)
+            )
+    }
+
+    if (return_data) {
+        result <- read.csv(file)
+    } else {
+        result <- file
+    }
+
+
+    if (delete_file) {
+        unlink(file)
+    }
+
+    return(result)
+}

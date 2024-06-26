@@ -1,15 +1,15 @@
-#' Downloads DOI files from Zotero
+#' Downloads DOI files from Zenodo
 #'
-#' This function downloads DOI files from Zotero using the provided DOI.
+#' This function downloads DOI files from Zenodo using the provided DOI.
 #'
 #' @param doi The DOI (Digital Object Identifier) of the file to be downloaded.
 #' @param dest_dir The directory where the files will be downloaded.
 #' 
 #' @examples
-#' \donotrun{
-#' zotero_download_doi_files("10.1234/abcd")
+#' \dontrun{
+#' zenodo_download_doi_files("10.1234/abcd")
 #' }
-zotero_download_doi_files <- function(
+zenodo_download_doi_files <- function(
   doi = NULL,
   dest_dir = NULL
   ) {

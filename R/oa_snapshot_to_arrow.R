@@ -11,14 +11,14 @@
 #' @importFrom tictoc tic toc
 #'
 #' @examples
-#' \dontrun{}
+#' \dontrun{
 #' # Convert all data sets in the default snapshot directory
 #' oa_snapshot_to_arrow()
 #'
 #' # Convert specific data sets in a custom snapshot directory
 #' oa_snapshot_to_arrow(snapshot_dir = "/path/to/snapshot", data_sets = c("data_set1", "data_set2"))
 #' }
-#' 
+#'
 #' @export
 #' @md
 oa_snapshot_to_arrow <- function(
@@ -26,7 +26,6 @@ oa_snapshot_to_arrow <- function(
     arrow_dir = file.path("", "Volumes", "openalex", "arrow"),
     data_sets = NULL,
     overwrite = FALSE) {
-
     if (is.null(data_sets)) {
         data_sets <- list.dirs(file.path(snapshot_dir, "data"), recursive = FALSE, full.names = FALSE)
         ## Remove merged_dirs
@@ -39,7 +38,7 @@ oa_snapshot_to_arrow <- function(
     con <- DBI::dbConnect(duckdb::duckdb(), dbdir = "~/tmp/temp.duckdb", read_only = FALSE)
     # con <- DBI::dbConnect(duckdb::duckdb(), dbdir = "~/tmp/temp.duckdb", read_only = FALSE)
 
-    on.exit(duckdb::dbDisconnect(con, shutdown = TRUE))
+    on.exit()
 
     paste0(
         "INSTALL json"
