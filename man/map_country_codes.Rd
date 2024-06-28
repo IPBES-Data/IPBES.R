@@ -27,7 +27,9 @@ A ggplot object representing the map of the specified map_type.
 This function downloads and plots the GADM and IPBES regions according to a list of ISO codes provided.
 }
 \examples{
+\dontrun{
 map_country_codes()
 map_country_codes(iso3c = c("USA", "CAN"), map_type = "regions")
+}
 
 }

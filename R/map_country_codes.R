@@ -20,9 +20,11 @@
 #' @return A ggplot object representing the map of the specified map_type.
 #'
 #' @examples
+#' \dontrun{
 #' map_country_codes()
 #' map_country_codes(iso3c = c("USA", "CAN"), map_type = "regions")
-#'
+#' }
+#' 
 #' @export
 map_country_codes <- function(
     data = NULL,

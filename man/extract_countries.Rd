@@ -30,10 +30,12 @@ If \code{first_only} is set to FALSE, it returns a vector containing the institu
 If an author has no institution country code or if it is missing, NA is returned.
 }
 \examples{
+\dontrun{
 authors <- data.frame(
     institution_country_code = c("US", "UK", "DE"),
     stringsAsFactors = FALSE
 )
 extract_countries(authors)
+}
 
 }

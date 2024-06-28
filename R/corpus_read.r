@@ -14,7 +14,10 @@
 #' @md
 #'
 #' @examples
+#' \dontrun{
 #' corpus_read("data/corpus/")
+#' }
+#' 
 corpus_read <- function(
     path = file.path("data", "corpus"),
     unify_schemas = FALSE) {

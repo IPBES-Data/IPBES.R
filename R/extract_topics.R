@@ -29,6 +29,7 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' data <- data.frame(
 #'     id = c(1, 2, 3),
 #'     publication_year = c(2020, 2021, 2022),
@@ -62,7 +63,8 @@
 #' # 3        2             2021     1   0.9 topic3   103 Topic 3
 #' # 4        2             2021     2   0.7 topic4   104 Topic 4
 #' # 5        2             2021     3   0.5 topic5   105 Topic 5
-#'
+#' }
+#' 
 extract_topics <- function(
     data,
     names = c("topic", "subfield", "field", "domain"),

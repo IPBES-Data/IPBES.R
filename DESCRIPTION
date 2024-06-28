@@ -1,7 +1,7 @@
 Package: IPBES.R
 Type: Package
 Title: Tool functions used by the Data and Knowledge Technical Support Unit of IPBES
-Version: 0.4.5
+Version: 0.4.6
 Date: 2023-11-13
 Authors@R: 
   c(person(given = "Rainer M.",
@@ -30,7 +30,15 @@ Imports:
   terra,
   countrycode,
   geodata,
-  DT
+  DT,
+  arrow,
+  base64enc,
+  DBI,
+  duckdb,
+  pbapply,
+  pbmcapply,
+  purrr,
+  tictoc
 Suggests: 
     roxyglobals,
     tinytest

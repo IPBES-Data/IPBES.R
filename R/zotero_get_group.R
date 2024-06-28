@@ -17,7 +17,7 @@
 #' @param return_data Logical indicating whether to return the data as a data frame.
 #' @param delete_file Logical indicating whether to delete the file after retrieving the data.
 #'
-#' @importFrom httr2 request req_headers req_url_query req_perform resp_headers resp_body_string
+#' @importFrom httr2 request req_headers req_url_query req_perform resp_headers resp_body_string req_retry
 #' @importFrom utils read.csv write.table
 #'
 #' @return If `return_data`` is` TRUE`, the function returns a data frame containing the retrieved data.
@@ -62,10 +62,11 @@ zotero_get_group <- function(
 
     req <- url |>
         httr2::request() |>
-        req_retry(
+        httr2::req_retry(
             is_transient = function(...) {
                 return(TRUE)
-            }
+            },
+            max_tries = 10
         )
 
     req <- req |>

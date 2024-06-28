@@ -18,12 +18,14 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' authors <- data.frame(
 #'     institution_country_code = c("US", "UK", "DE"),
 #'     stringsAsFactors = FALSE
 #' )
 #' extract_countries(authors)
-#'
+#' }
+#' 
 #' @md
 
 extract_countries <- function(

@@ -32,10 +32,11 @@ The \code{extract_authors} function takes a data frame of with one column named 
 nd returns these as a \code{tibble} with additional info of the OpenAlex \code{id} of the work and the \code{publication_y}.
 }
 \examples{
+\dontrun{
 authors <- data.frame(
     institution_country_code = c("US", "UK", "DE"),
     stringsAsFactors = FALSE
 )
 extract_countries(authors)
-
+}
 }

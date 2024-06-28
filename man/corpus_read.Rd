@@ -19,5 +19,8 @@ A corpus object.
 This function opens a dataset from a specified path and returns a corpus object.
 }
 \examples{
+\dontrun{
 corpus_read("data/corpus/")
+}
+
 }
