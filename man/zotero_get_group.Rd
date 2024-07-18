@@ -8,8 +8,7 @@ zotero_get_group(
   group_id = 2352922,
   file = tempfile(fileext = ".csv"),
   overwrite = FALSE,
-  return_data = FALSE,
-  delete_file = FALSE
+  return_data = FALSE
 )
 }
 \arguments{
@@ -20,8 +19,6 @@ zotero_get_group(
 \item{overwrite}{Logical indicating whether to overwrite an existing file with the same name.}
 
 \item{return_data}{Logical indicating whether to return the data as a data frame.}
-
-\item{delete_file}{Logical indicating whether to delete the file after retrieving the data.}
 }
 \value{
 If \verb{return_data`` is} TRUE`, the function returns a data frame containing the retrieved data.

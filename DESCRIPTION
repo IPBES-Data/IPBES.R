@@ -43,7 +43,7 @@ Suggests:
     roxyglobals,
     tinytest
 Encoding: UTF-8
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2.9000
 Roxygen: list(roclets = c("collate", "namespace", "rd",
     "roxyglobals::global_roclet"))
 Config/roxyglobals/filename: globals.R

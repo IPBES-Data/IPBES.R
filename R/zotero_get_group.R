@@ -15,7 +15,6 @@
 #' @param file The file path to save the retrieved data.
 #' @param overwrite Logical indicating whether to overwrite an existing file with the same name.
 #' @param return_data Logical indicating whether to return the data as a data frame.
-#' @param delete_file Logical indicating whether to delete the file after retrieving the data.
 #'
 #' @importFrom httr2 request req_headers req_url_query req_perform resp_headers resp_body_string req_retry
 #' @importFrom utils read.csv write.table
@@ -40,97 +39,98 @@ zotero_get_group <- function(
     group_id = 2352922,
     file = tempfile(fileext = ".csv"),
     overwrite = FALSE,
-    return_data = FALSE,
-    delete_file = FALSE) {
-    ##
-    if (file.exists(file)) {
-        if (overwrite) {
-            message("Overwriting existing file ", file)
-            unlink(file)
-        } else {
-            stop("File ", file, " already exists and would be overwritten!")
-        }
+    return_data = FALSE) {
+  ##
+  if (file.exists(file)) {
+    if (overwrite) {
+      message("Overwriting existing file ", file)
+      unlink(file)
+    } else {
+      stop("File ", file, " already exists and would be overwritten!")
     }
+  }
 
-    api_endpoint <- "https://api.zotero.org/"
+  api_endpoint <- "https://api.zotero.org/"
 
-    url <- paste0(
-        api_endpoint,
-        "groups/", group_id, "/",
-        "items"
+  url <- paste0(
+    api_endpoint,
+    "groups/", group_id, "/",
+    "items"
+  )
+
+  req <- url |>
+    httr2::request() |>
+    httr2::req_retry(
+      is_transient = function(resp) {
+        resp_status(resp) %in% c(429, 500, 503)
+      },
+      max_tries = 10
     )
 
-    req <- url |>
-        httr2::request() |>
-        httr2::req_retry(
-            is_transient = function(...) {
-                return(TRUE)
-            },
-            max_tries = 10
-        )
+  req <- req |>
+    httr2::req_headers(
+      "Zotero-API-Version" = 3
+    )
 
+  req <- req |>
+    httr2::req_url_query(
+      "format" = "csv",
+      "limit" = 100,
+      "start" = 0
+    )
+
+  next_start <- 0
+
+  repeat {
+    message("Downloading 100 records starting at record ", next_start, " ...")
     req <- req |>
-        httr2::req_headers(
-            "Zotero-API-Version" = 3
-        )
+      httr2::req_url_query(
+        "start" = next_start
+      )
 
-    req <- req |>
-        httr2::req_url_query(
-            "format" = "csv",
-            "limit" = 100,
-            "start" = 0
-        )
+    resp <- req |>
+      httr2::req_perform()
 
-    next_start <- 0
+    next_start <- resp |>
+      httr2::resp_headers(filter = "link") |>
+      as.character() |>
+      strsplit(split = "\",") |>
+      unlist() |>
+      grep(pattern = "\"next", value = TRUE) |>
+      gsub(pattern = ".*start=([0-9]+).*", replacement = "\\1")
 
-    repeat {
-        message("Downloading 100 records starting at record ", next_start, " ...")
-        req <- req |>
-            httr2::req_url_query(
-                "start" = next_start
-            )
-
-        resp <- req |>
-            httr2::req_perform()
-
-        next_start <- resp |>
-            httr2::resp_headers(filter = "link") |>
-            as.character() |>
-            strsplit(split = "\",") |>
-            unlist() |>
-            grep(pattern = "\"next", value = TRUE) |>
-            gsub(pattern = ".*start=([0-9]+).*", replacement = "\\1")
-
-        if (length(next_start) == 0) {
-            break()
-        }
-
-        resp |>
-            httr2::resp_body_string() |>
-            textConnection() |>
-            read.csv() |>
-            write.table(
-                file = file,
-                append = file.exists(file),
-                quote = TRUE,
-                sep = ",",
-                dec = ".",
-                qmethod = "double",
-                row.names = FALSE,
-                col.names = !file.exists(file)
-            )
+    if (length(next_start) == 0) {
+      break()
     }
 
-    if (return_data) {
-        result <- read.csv(file)
-    } else {
-        result <- file
-    }
+    tmp_file <- tempfile()
+    on.exit(unlink(tmp_file))
 
+    resp |>
+      httr2::resp_body_string() |>
+      textConnection() |>
+      read.csv() |>
+      write.table(
+        file = tmp_file,
+        append = file.exists(tmp_file),
+        quote = TRUE,
+        sep = ",",
+        dec = ".",
+        qmethod = "double",
+        row.names = FALSE,
+        col.names = !file.exists(tmp_file)
+      )
+  }
 
-    if (delete_file) {
-        unlink(file)
-    }
+  if (return_data) {
+    result <- read.csv(tmp_file)
+  } else {
+    file.copy(
+      from = tmp_file,
+      to = file
+    )
+    result <- file
+  }
 
-    return(result)
+  return(result)
 }
