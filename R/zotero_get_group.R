@@ -81,6 +81,9 @@ zotero_get_group <- function(
 
   next_start <- 0
 
+  tmp_file <- tempfile()
+  on.exit(unlink(tmp_file))
+
   repeat {
     message("Downloading 100 records starting at record ", next_start, " ...")
     req <- req |>
@@ -102,9 +105,6 @@ zotero_get_group <- function(
     if (length(next_start) == 0) {
       break()
     }
-
-    tmp_file <- tempfile()
-    on.exit(unlink(tmp_file))
 
     resp |>
       httr2::resp_body_string() |>
