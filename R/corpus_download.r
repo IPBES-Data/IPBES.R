@@ -33,132 +33,129 @@ corpus_download <- function(
     continue = TRUE,
     delete_pages_dir = FALSE,
     select_fields = c(
-        "id",
-        "doi",
-        "authorships",
-        "publication_year",
-        "display_name",
-        "abstract_inverted_index",
-        "topics"
+      "id",
+      "doi",
+      "authorships",
+      "publication_year",
+      "display_name",
+      "abstract_inverted_index",
+      "topics"
     ),
     verbose = TRUE,
     dry_run = FALSE,
     mc_cores = 3
     #
     ) {
-    if (!require(openalexR.IPBES)) {
-        stop("This function requires the custo mised package `openalexR.IPBES`. Aborting!")
-    }
-    if (delete_pages_dir) {
-        unlink(
-            pages_dir,
-            recursive = TRUE
-        )
-    }
-
-    dir.create(
-        path = pages_dir,
-        showWarnings = FALSE,
-        recursive = TRUE
+  if (delete_pages_dir) {
+    unlink(
+      pages_dir,
+      recursive = TRUE
     )
+  }
 
-    years <- oa_fetch(
-        title_and_abstract.search = compact(title_and_abstract_search),
-        group_by = "publication_year",
-        paging = "cursor",
-        verbose = FALSE
-    )$key
+  dir.create(
+    path = pages_dir,
+    showWarnings = FALSE,
+    recursive = TRUE
+  )
 
-    if (continue) {
-        processed <- list.dirs(
-            path = pages_dir,
-            full.names = FALSE,
-            recursive = FALSE
-        ) |>
-            gsub(
-                pattern = paste0("^set_publication_year=", ""),
-                replacement = ""
-            )
+  years <- oa_fetch(
+    title_and_abstract.search = compact(title_and_abstract_search),
+    group_by = "publication_year",
+    paging = "cursor",
+    verbose = FALSE
+  )$key
 
-        interrupted <- list.files(
-            path = pages_dir,
-            pattern = "00_in_progress_00",
-            full.names = TRUE,
-            recursive = TRUE
-        ) |>
-            gsub(
-                pattern = paste0("^", pages_dir, "/set_publication_year=", ""),
-                replacement = ""
-            ) |>
-            gsub(
-                pattern = "/00_in_progress_00",
-                replacement = ""
-            )
+  if (continue) {
+    processed <- list.dirs(
+      path = pages_dir,
+      full.names = FALSE,
+      recursive = FALSE
+    ) |>
+      gsub(
+        pattern = paste0("^set_publication_year=", ""),
+        replacement = ""
+      )
 
-        completed <- processed[!(processed %in% interrupted)]
+    interrupted <- list.files(
+      path = pages_dir,
+      pattern = "00_in_progress_00",
+      full.names = TRUE,
+      recursive = TRUE
+    ) |>
+      gsub(
+        pattern = paste0("^", pages_dir, "/set_publication_year=", ""),
+        replacement = ""
+      ) |>
+      gsub(
+        pattern = "/00_in_progress_00",
+        replacement = ""
+      )
 
-        years <- years[!(years %in% completed)]
-    }
+    completed <- processed[!(processed %in% interrupted)]
 
-    if (length(years) == 0) {
-        message("All years have been processed.")
-        return(invisible())
-    }
+    years <- years[!(years %in% completed)]
+  }
 
-    if (!dry_run) {
-        pbmcapply::pbmclapply(
-            years,
-            function(y) {
-                if (verbose) {
-                    message("\nGetting data for year ", y, " ...")
-                }
+  if (length(years) == 0) {
+    message("All years have been processed.")
+    return(invisible())
+  }
 
-                output_path <- file.path(pages_dir, paste0("set_publication_year=", y))
+  if (!dry_run) {
+    pbmcapply::pbmclapply(
+      years,
+      function(y) {
+        if (verbose) {
+          message("\nGetting data for year ", y, " ...")
+        }
 
-                dir.create(
-                    path = output_path,
-                    showWarnings = FALSE,
-                    recursive = TRUE
-                )
+        output_path <- file.path(pages_dir, paste0("set_publication_year=", y))
 
-                file.create(file.path(output_path, "00_in_progress_00"))
-
-                openalexR::oa_query(
-                    title_and_abstract.search = compact(title_and_abstract_search),
-                    publication_year = y,
-                    options = list(
-                        select = select_fields
-                    )
-                ) |>
-                    openalexR.IPBES::oa_request(
-                        output_pages_to = output_path,
-                        pages_save_function = saveRDS,
-                        verbose = verbose
-                    )
-
-                file.rename(
-                    file.path(output_path, "00_in_progress_00"),
-                    file.path(output_path, "00_complete_00")
-                )
-            },
-            mc.cores = mc_cores,
-            mc.preschedule = FALSE
-        ) |>
-            invisible()
-    }
-
-    in_progress <- list.files(file.path(pages_dir, "00_in_progress_00"), full.names = TRUE, recursive = TRUE)
-
-    if (length(in_progress) > 0) {
-        warning(
-            "The following years did not complete successful:\n",
-            paste0(in_progress, collapse = "\n"),
-            "\nPlease run the function again with the same parameters but\n",
-            "'delete_pages_dir = FALSE, continue = TRUE'"
+        dir.create(
+          path = output_path,
+          showWarnings = FALSE,
+          recursive = TRUE
         )
-    } else {
-        message("All years have been processed.")
-    }
 
-    return(length(in_progress))
+        file.create(file.path(output_path, "00_in_progress_00"))
+
+        openalexR::oa_query(
+          title_and_abstract.search = compact(title_and_abstract_search),
+          publication_year = y,
+          options = list(
+            select = select_fields
+          )
+        ) |>
+          IPBES.R:::oa_request(
+            output_pages_to = output_path,
+            pages_save_function = saveRDS,
+            verbose = verbose
+          )
+
+        file.rename(
+          file.path(output_path, "00_in_progress_00"),
+          file.path(output_path, "00_complete_00")
+        )
+      },
+      mc.cores = mc_cores,
+      mc.preschedule = FALSE
+    ) |>
+      invisible()
+  }
+
+  in_progress <- list.files(file.path(pages_dir, "00_in_progress_00"), full.names = TRUE, recursive = TRUE)
+
+  if (length(in_progress) > 0) {
+    warning(
+      "The following years did not complete successful:\n",
+      paste0(in_progress, collapse = "\n"),
+      "\nPlease run the function again with the same parameters but\n",
+      "'delete_pages_dir = FALSE, continue = TRUE'"
+    )
+  } else {
+    message("All years have been processed.")
+  }
+
+  return(length(in_progress))
 }
