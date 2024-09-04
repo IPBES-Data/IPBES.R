@@ -13,7 +13,8 @@ corpus_download(
     "abstract_inverted_index", "topics"),
   verbose = TRUE,
   dry_run = FALSE,
-  mc_cores = 3
+  mc_cores = 3,
+  ...
 )
 }
 \arguments{
@@ -37,6 +38,8 @@ These are needed to use the function `corpuus_pages_to_arrow()`.}
 
 \item{mc_cores}{The number of cores to be used for parallel processing. Default is 3.
 This is limiting the number of parallel downloads}
+
+\item{...}{Additional filter arguments.}
 }
 \value{
 None

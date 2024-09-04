@@ -18,6 +18,7 @@
 #' @param dry_run Logical indicating whether to run the function without downloading any data. Default is FALSE.
 #' @param mc_cores The number of cores to be used for parallel processing. Default is 3.
 #'   This is limiting the number of parallel downloads
+#' @param ... Additional filter arguments.
 #'
 #' @return None
 #'
@@ -43,7 +44,8 @@ corpus_download <- function(
     ),
     verbose = TRUE,
     dry_run = FALSE,
-    mc_cores = 3
+    mc_cores = 3,
+    ...
     #
     ) {
   if (delete_pages_dir) {
@@ -63,7 +65,8 @@ corpus_download <- function(
     title_and_abstract.search = compact(title_and_abstract_search),
     group_by = "publication_year",
     paging = "cursor",
-    verbose = FALSE
+    verbose = FALSE,
+    ...
   )$key
 
   if (continue) {
@@ -125,7 +128,8 @@ corpus_download <- function(
           publication_year = y,
           options = list(
             select = select_fields
-          )
+          ),
+          ...
         ) |>
           IPBES.R:::oa_request(
             output_pages_to = output_path,
