@@ -3,7 +3,8 @@
 #' This function checks if a given list of DOIs (Digital Object Identifiers) are retracted.
 #' It uses the Crossref API to query the Retraction Watch database.
 #'
-#' @param dois A character vector of DOIs to be checked.
+#' The dois are cleaned, i.e. the resolver are removed, before processing.
+#' @param dois A vector of DOIs to be validated. Resolver will be removed
 #' @param cache_file A file name of the cache to be used, i.e. the downloaded retraction data. THe file is an `rds` file as downloaded from the retractionwatch site. If NULL, the data will not be cached.
 #' @param email An optional email address to be included in the API request [RECOMMENDET!].
 #'
@@ -20,6 +21,7 @@
 #'
 #' @export
 doi_not_retracted <- function(dois, cache_file = NULL, email = NULL) {
+    dois <- doi_clean(dois)
     if (is.null(cache_file)) {
         tmpfile <- tempfile(fileext = ".csv")
         utils::download.file(

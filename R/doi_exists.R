@@ -8,7 +8,8 @@ library(httr2)
 #'
 #' @details This function uses the httr package to send HTTP GET requests to the DOI resolver and checks the response status code. A status code of 200 indicates that the DOI exists, while any other status code indicates that the DOI does not exist.
 #'
-#' @param dois A character vector of DOIs to check.
+#' The dois are cleaned, i.e. the resolver are removed, before processing.
+#' @param dois A vector of DOIs to be validated. Resolver will be removed.
 #' @param cache_file A file name of the cache to be used, i.e. the confirmed existing dois. The format is a character vector with the DOIs which exist. If the cache exist, it will be updated at the end. Temporary caches will be written after 100 checks.
 #'
 #' @return A named logical vector indicating whether each DOI does exist or not, names are the dois.
@@ -22,6 +23,9 @@ library(httr2)
 #'
 #' @export
 doi_exists <- function(dois, cache_file = NULL) {
+    # remove resolver part from dois
+    dois <- doi_clean(dois)
+
     if (is.null(cache_file)) {
         cache <- NULL
         dois_to_check <- dois
@@ -56,25 +60,25 @@ doi_exists <- function(dois, cache_file = NULL) {
 
         if (!is.na(result_dois_checked$doi[j])) {
             try({
-                status <- httr2::request(paste0("https://doi.org/", result_dois_checked$doi[j])) |>
-                    httr2::req_headers(
-                        noredirect = TRUE,
-                        type = "URL"
-                    ) |>
+                response <- httr2::request(paste0("https://doi.org/api/handles/", result_dois_checked$doi[j])) |>
+                    # httr2::req_headers(
+                    #     noredirect = TRUE,
+                    #     type = "URL"
+                    # ) |>
                     httr2::req_throttle(
-                        rate = 30 / 60
+                        rate = 90 / 60
                     ) |>
                     httr2::req_retry(
                         max_tries = 5
                     ) |>
-                    httr2::req_error(
-                        is_error = function(e) {
-                            FALSE
-                        }
-                    ) |>
+                    # httr2::req_error(
+                    #     is_error = function(e) {
+                    #         FALSE
+                    #     }
+                    # ) |>
                     httr2::req_perform() |>
-                    httr2::resp_status()
-                result_dois_checked$exists[j] <- (status == 200)
+                    httr2::resp_body_json()
+                result_dois_checked$exists[j] <- (response$responseCode == 1)
 
                 # Save temporary cache
                 if ((!is.null(cache_file)) & (j %% 100 == 0)) {

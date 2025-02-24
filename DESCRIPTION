@@ -1,7 +1,7 @@
 Package: IPBES.R
 Type: Package
 Title: Tool functions used by the Data and Knowledge Technical Support Unit of IPBES
-Version: 0.4.7
+Version: 0.4.8
 Date: 2023-11-13
 Authors@R: 
   c(person(given = "Rainer M.",
@@ -43,8 +43,8 @@ Suggests:
     roxyglobals,
     tinytest
 Encoding: UTF-8
-RoxygenNote: 7.3.2.9000
 Roxygen: list(roclets = c("collate", "namespace", "rd",
     "roxyglobals::global_roclet"))
 Config/roxyglobals/filename: globals.R
 Config/roxyglobals/unique: FALSE
+RoxygenNote: 7.3.2

@@ -7,7 +7,7 @@
 doi_not_retracted(dois, cache_file = NULL, email = NULL)
 }
 \arguments{
-\item{dois}{A character vector of DOIs to be checked.}
+\item{dois}{A vector of DOIs to be validated. Resolver will be removed}
 
 \item{cache_file}{A file name of the cache to be used, i.e. the downloaded retraction data. THe file is an `rds` file as downloaded from the retractionwatch site. If NULL, the data will not be cached.}
 
@@ -19,6 +19,9 @@ A named logical vector indicating whether each DOI is retracted (`FALSE`) or or 
 \description{
 This function checks if a given list of DOIs (Digital Object Identifiers) are retracted.
 It uses the Crossref API to query the Retraction Watch database.
+}
+\details{
+The dois are cleaned, i.e. the resolver are removed, before processing.
 }
 \examples{
 # Check if a single DOI is retracted

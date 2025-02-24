@@ -7,7 +7,7 @@
 doi_exists(dois, cache_file = NULL)
 }
 \arguments{
-\item{dois}{A character vector of DOIs to check.}
+\item{dois}{A vector of DOIs to be validated. Resolver will be removed.}
 
 \item{cache_file}{A file name of the cache to be used, i.e. the confirmed existing dois. The format is a character vector with the DOIs which exist. If the cache exist, it will be updated at the end. Temporary caches will be written after 100 checks.}
 }
@@ -19,6 +19,8 @@ This function checks if a given list of DOIs exist by sending HTTP requests to t
 }
 \details{
 This function uses the httr package to send HTTP GET requests to the DOI resolver and checks the response status code. A status code of 200 indicates that the DOI exists, while any other status code indicates that the DOI does not exist.
+
+The dois are cleaned, i.e. the resolver are removed, before processing.
 }
 \examples{
 dois <- c("sbcd1234", "10.1234/abcd", "10.1002/jcb.23190", "10.47366/sabia.v5n1a3")

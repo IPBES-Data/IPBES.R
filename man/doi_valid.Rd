@@ -7,14 +7,15 @@
 doi_valid(dois)
 }
 \arguments{
-\item{dois}{A vector of DOIs to be validated.}
+\item{dois}{A vector of DOIs to be validated. Resolver will be removed.}
 }
 \value{
 A named logical vector indicating whether each DOI is valid or not, names are the dois.
 }
 \description{
 This function validates a vector of DOIs (Digital Object Identifiers) using a regular expression pattern.#'
-It is taken from https://github.com/libscie/retractcheck/blob/23f1e5c7d572d9470583288d951d1bad98392f82/R/utils.R#L16
+It is taken from https://www.crossref.org/blog/dois-and-matching-regular-expressions/
+The dois are cleaned, i.e. the resolver are removed, before processing.
 }
 \details{
 The function uses a regular expression pattern to validate the format of each DOI in the input vector.
