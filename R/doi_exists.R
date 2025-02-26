@@ -65,7 +65,11 @@ doi_exists <- function(dois, cache_file = NULL, use = "doi.org") {
   # read cache and select only dois to check which are not in the cache or did not exist
   if (!is.null(cache_file) && file.exists(cache_file)) {
     message(paste0("Using cache from ", cache_file))
-    cache <- readRDS(cache_file)
+    if (file.exists(cache_file)) {
+      cache <- readRDS(cache_file)
+    } else {
+      cache <- logical(0)
+    }
     dois_to_check <- dois[!dois %in% names(cache[cache])]
   } else {
     cache <- logical(0)
@@ -77,19 +81,19 @@ doi_exists <- function(dois, cache_file = NULL, use = "doi.org") {
     suppressWarnings(
       do_exist <- openalexR::oa_fetch(
         entity = "work",
-        doi = dois,
+        doi = dois_to_check,
         verbose = TRUE,
         options = list(select = "doi")
       ) |>
         unlist() |>
         unname() |>
         doi_clean() |>
-        `%in%`(x = dois)
+        `%in%`(x = dois_to_check)
     )
-    names(do_exist) <- dois
+    names(do_exist) <- dois_to_check
   } else if (use == "doi.org") {
     do_exist <- pbapply::pblapply(
-      dois,
+      dois_to_check,
       function(doi) {
         response <- NULL
         try(
@@ -117,19 +121,28 @@ doi_exists <- function(dois, cache_file = NULL, use = "doi.org") {
       }
     ) |>
       unlist()
-    names(do_exist) <- dois
+    names(do_exist) <- dois_to_check
   }
 
-  do_exist <- names(do_exist)[do_exist]
 
-  do_exist <- as.logical(dois_org %in% do_exist)
-  names(do_exist) <- dois_org
 
   if (!is.null(cache_file)) {
-    c(cache, do_exist[!duplicated(names(do_exist))]) |>
-      unique() |>
-      saveRDS(file = cache_file)
+    new_cache <- c(do_exist[!duplicated(names(do_exist))], cache)
+    new_cache <- new_cache[!duplicated(names(new_cache), fromLast = TRUE)] # only keeping the last occurance, i.e. the one from do_exist
+
+    dir.create(
+      path = dirname(cache_file),
+      showWarnings = FALSE,
+      recursive = TRUE
+    )
+
+    saveRDS(
+      new_cache,
+      file = cache_file
+    )
   }
+
+  do_exist <- new_cache[dois_org]
 
   return(do_exist)
 }
