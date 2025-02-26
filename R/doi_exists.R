@@ -120,6 +120,8 @@ doi_exists <- function(dois, cache_file = NULL, use = "doi.org") {
     names(do_exist) <- dois
   }
 
+  do_exist <- names(do_exist)[do_exist]
+
   do_exist <- as.logical(dois_org %in% do_exist)
   names(do_exist) <- dois_org
 

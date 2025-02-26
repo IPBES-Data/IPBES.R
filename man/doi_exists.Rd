@@ -9,7 +9,7 @@ doi_exists(dois, cache_file = NULL, use = "doi.org")
 \arguments{
 \item{dois}{character vector: A vector of DOIs to be validated. Resolver will be removed.}
 
-\item{cache_file}{Not used at the moment - might be used again.}
+\item{cache_file}{An \code{.rds} file containing the results from a previous check.}
 
 \item{use}{string of length 1: The backend to be used for the verification of existence. Each has advantages or disadvantages.
 \itemize{
@@ -24,9 +24,14 @@ A named logical vector indicating whether each DOI does exist or not, names are 
 This function checks if a given list of DOIs exist by sending HTTP requests to the DOI resolver.
 }
 \details{
-This function uses the httr package to send HTTP GET requests to the DOI resolver and checks the response status code. A status code of 200 indicates that the DOI exists, while any other status code indicates that the DOI does not exist.
-
+This function checks if DOIs do exist, i.e. can be resolved. Two different methods are provided:
+\itemize{
+\item doi.org: The default and recommended approach. The dois are verified, one-by-one, using the official authoratative \href{https://doi.org}{doi.org} resolver.
+This is a robust approach and malformed dDOIs are handled gracefully, i.e. as non existing.
+\item OpenAlex: The dois are used as filter in OpenAlex and one field is retrieved if they do exist on OpenAlex. This is not
+forgiving for malformed DOIs (i.e. with an error). Furthermore, OpenAlex does not has all DOIs.
 The dois are cleaned, i.e. the resolver are removed, before processing.
+}
 }
 \examples{
 dois <- c(
