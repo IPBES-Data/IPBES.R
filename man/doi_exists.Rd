@@ -4,12 +4,18 @@
 \alias{doi_exists}
 \title{Check if DOIs exist}
 \usage{
-doi_exists(dois, cache_file = NULL)
+doi_exists(dois, cache_file = NULL, use = "doi.org")
 }
 \arguments{
-\item{dois}{A vector of DOIs to be validated. Resolver will be removed.}
+\item{dois}{character vector: A vector of DOIs to be validated. Resolver will be removed.}
 
-\item{cache_file}{A file name of the cache to be used, i.e. the confirmed existing dois. The format is a character vector with the DOIs which exist. If the cache exist, it will be updated at the end. Temporary caches will be written after 100 checks.}
+\item{cache_file}{Not used at the moment - might be used again.}
+
+\item{use}{string of length 1: The backend to be used for the verification of existence. Each has advantages or disadvantages.
+\itemize{
+\item \strong{\code{doi.org}}: has the most DOIs; is more stable towards mal-formed DOIs
+\item \strong{\code{OpenAlex}}: does not have all DOIs but returns if the DOI is in OpenAlex; crashes when DOI is mal-formed
+}}
 }
 \value{
 A named logical vector indicating whether each DOI does exist or not, names are the dois.
@@ -23,8 +29,24 @@ This function uses the httr package to send HTTP GET requests to the DOI resolve
 The dois are cleaned, i.e. the resolver are removed, before processing.
 }
 \examples{
-dois <- c("sbcd1234", "10.1234/abcd", "10.1002/jcb.23190", "10.47366/sabia.v5n1a3")
-doi_exists(dois)
-# Output: [1] FALSE  TRUE
+dois <- c(
+  "sbcd1234", # not existing
+  "10.1234/abcd", # not existing
+  "https://doi.org/10.1002/jcb.23190", # existing with resolver
+  "10.47366/sabia.v5n1a3", # existing
+  "10.1002/ece3.10852", # existing
+  "10.1002/ece3.10853", # existing
+  "10.1002/ece3.10854", # existing
+  "10.1002/ece3.10855", # existing
+  "10.1002/ece3.10856", # existing
+  "10.1002/ece3.10857" # existing
+)
+doi_exists(dois, use = "doi.org")
+# Output: sbcd1234 10.1234/abcd 10.1002/jcb.23190 10.47366/sabia.v5n1a3 10.1002/ece3.10852 10.1002/ece3.10853 10.1002/ece3.10854 10.1002/ece3.10855 10.1002/ece3.10856 10.1002/ece3.10857
+#         FALSE         FALSE          TRUE          TRUE          TRUE          TRUE          TRUE          TRUE          TRUE          TRUE
+
+doi_exists(dois, use = "OpenAlex")
+# Output: sbcd1234 10.1234/abcd 10.1002/jcb.23190 10.47366/sabia.v5n1a3 10.1002/ece3.10852 10.1002/ece3.10853 10.1002/ece3.10854 10.1002/ece3.10855 10.1002/ece3.10856 10.1002/ece3.10857
+#         FALSE         FALSE          TRUE          TRUE          TRUE          TRUE          TRUE          TRUE          TRUE          TRUE
 
 }
