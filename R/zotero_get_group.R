@@ -16,7 +16,7 @@
 #' @param overwrite Logical indicating whether to overwrite an existing file with the same name.
 #' @param return_data Logical indicating whether to return the data as a data frame.
 #'
-#' @importFrom httr2 request req_headers req_url_query req_perform resp_headers resp_body_string req_retry
+#' @importFrom httr2 request req_headers req_url_query req_perform resp_headers resp_body_string req_retry resp_status
 #' @importFrom utils read.csv write.table
 #'
 #' @return If `return_data`` is` TRUE`, the function returns a data frame containing the retrieved data.
@@ -62,7 +62,7 @@ zotero_get_group <- function(
     httr2::request() |>
     httr2::req_retry(
       is_transient = function(resp) {
-        resp_status(resp) %in% c(429, 500, 503)
+        httr2::resp_status(resp) %in% c(429, 500, 503)
       },
       max_tries = 10
     )
