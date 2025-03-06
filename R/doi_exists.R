@@ -140,6 +140,8 @@ doi_exists <- function(dois, cache_file = NULL, use = "doi.org") {
       new_cache,
       file = cache_file
     )
+  } else {
+    new_cache <- do_exist[!duplicated(names(do_exist))]
   }
 
   do_exist <- new_cache[dois_org]
