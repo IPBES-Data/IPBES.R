@@ -8,7 +8,8 @@ zotero_get_group(
   group_id = 2352922,
   file = tempfile(fileext = ".csv"),
   overwrite = FALSE,
-  return_data = FALSE
+  return_data = FALSE,
+  api_key = NULL
 )
 }
 \arguments{
@@ -19,6 +20,8 @@ zotero_get_group(
 \item{overwrite}{Logical indicating whether to overwrite an existing file with the same name.}
 
 \item{return_data}{Logical indicating whether to return the data as a data frame.}
+
+\item{api_key}{API key for Zotero. Only needed for private groups.}
 }
 \value{
 If \verb{return_data`` is} TRUE`, the function returns a data frame containing the retrieved data.

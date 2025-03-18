@@ -15,7 +15,8 @@
 #' @param file The file path to save the retrieved data.
 #' @param overwrite Logical indicating whether to overwrite an existing file with the same name.
 #' @param return_data Logical indicating whether to return the data as a data frame.
-#'
+#' 
+#' @param api_key API key for Zotero. Only needed for private groups.
 #' @importFrom httr2 request req_headers req_url_query req_perform resp_headers resp_body_string req_retry resp_status
 #' @importFrom utils read.csv write.table
 #'
@@ -39,7 +40,8 @@ zotero_get_group <- function(
     group_id = 2352922,
     file = tempfile(fileext = ".csv"),
     overwrite = FALSE,
-    return_data = FALSE) {
+    return_data = FALSE,
+    api_key = NULL) {
   ##
   if (file.exists(file)) {
     if (overwrite) {
@@ -78,6 +80,13 @@ zotero_get_group <- function(
       "limit" = 100,
       "start" = 0
     )
+  
+  if (!is.null(api_key)){
+    req <- req |>
+      httr2::req_url_query(
+        "key" = api_key
+      )
+  }
 
   next_start <- 0
 
