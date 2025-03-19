@@ -130,9 +130,8 @@ zotero_get_group_rdf <- function(
   }
 
   file.copy(
-    from = tmp_path,
-    to = path,
-    recursive = TRUE
+    from = list.files(tmp_path, full.names = TRUE),
+    to = path
   )
 
   return(path)
