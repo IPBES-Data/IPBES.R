@@ -12,10 +12,11 @@
 #' Note: To use this function, you need to have the \pkg{httr2} and \pkg{stringr} packages installed.
 #'
 #' @param group_id The ID of the Zotero group.
-#' @param file The file path to save the retrieved data.
+#' @param file The file path to save the retrieved data. The output format extension will be added automatically.
 #' @param overwrite Logical indicating whether to overwrite an existing file with the same name.
+#' @param output_format The format of the output file. Supported is `parquet` and `csv`. Default is "csv".
 #' @param return_data Logical indicating whether to return the data as a data frame.
-#' 
+#'
 #' @param api_key API key for Zotero. Only needed for private groups.
 #' @importFrom httr2 request req_headers req_url_query req_perform resp_headers resp_body_string req_retry resp_status
 #' @importFrom utils read.csv write.table
@@ -41,8 +42,20 @@ zotero_get_group <- function(
     file = tempfile(fileext = ".csv"),
     overwrite = FALSE,
     return_data = FALSE,
+    output_format = "csv",
     api_key = NULL) {
   ##
+
+  if (!(output_format %in% c("csv", "parquet"))) {
+    stop("output_format must be one of 'csv' or 'parquet'")
+  }
+
+  if (output_format == "parquet") {
+    file <- paste0(file, ".parquet")
+  } else {
+    file <- paste0(file, ".csv")
+  }
+
   if (file.exists(file)) {
     if (overwrite) {
       message("Overwriting existing file ", file)
@@ -51,6 +64,7 @@ zotero_get_group <- function(
       stop("File ", file, " already exists and would be overwritten!")
     }
   }
+
 
   api_endpoint <- "https://api.zotero.org/"
 
@@ -80,8 +94,8 @@ zotero_get_group <- function(
       "limit" = 100,
       "start" = 0
     )
-  
-  if (!is.null(api_key)){
+
+  if (!is.null(api_key)) {
     req <- req |>
       httr2::req_url_query(
         "key" = api_key
@@ -92,7 +106,6 @@ zotero_get_group <- function(
 
   tmp_file <- tempfile()
   on.exit(unlink(tmp_file))
-
   repeat {
     message("Downloading 100 records starting at record ", next_start, " ...")
     req <- req |>
@@ -134,11 +147,19 @@ zotero_get_group <- function(
   if (return_data) {
     result <- read.csv(tmp_file)
   } else {
-    file.copy(
-      from = tmp_file,
-      to = file
-    )
-    result <- file
+    if (output_format == "csv") {
+      file.copy(
+        from = tmp_file,
+        to = file
+      )
+      result <- file
+    } else if (output_format == "parquet") {
+      read.csv(tmp_file) |>
+        arrow::write_parquet(
+          sink = file,
+        )
+      result <- file
+    }
   }
 
   return(result)

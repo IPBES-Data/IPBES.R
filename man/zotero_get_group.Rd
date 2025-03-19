@@ -9,17 +9,20 @@ zotero_get_group(
   file = tempfile(fileext = ".csv"),
   overwrite = FALSE,
   return_data = FALSE,
+  output_format = "csv",
   api_key = NULL
 )
 }
 \arguments{
 \item{group_id}{The ID of the Zotero group.}
 
-\item{file}{The file path to save the retrieved data.}
+\item{file}{The file path to save the retrieved data. The output format extension will be added automatically.}
 
 \item{overwrite}{Logical indicating whether to overwrite an existing file with the same name.}
 
 \item{return_data}{Logical indicating whether to return the data as a data frame.}
+
+\item{output_format}{The format of the output file. Supported is \code{parquet} and \code{csv}. Default is "csv".}
 
 \item{api_key}{API key for Zotero. Only needed for private groups.}
 }
