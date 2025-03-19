@@ -41,14 +41,14 @@ zotero_get_group_rdf <- function(
   }
 
   if (dir.exists(path)) {
-    unlink(filpathe)
-  } else {
-    dir.create(
-      path, 
-      showWarnings = FALSE, 
-      recursive = TRUE
-    )
+    unlink(path)
   }
+  dir.create(
+    path,
+    showWarnings = FALSE,
+    recursive = TRUE
+  )
+
 
 
   api_endpoint <- "https://api.zotero.org/"
