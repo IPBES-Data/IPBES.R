@@ -8,7 +8,7 @@ Authors@R:
            family = "Krug",
            role = c("aut", "cre"),
            email = "Rainer@krugs.de",
-           comment = c(ORCID = "0000-0001-8049-7069"))
+           comment = c(ORCID = 0000-0002-7490-0066"))
   )
 Maintainer: Rainer M. Krug <Rainer@krugs.de>
 URL: https://ipbes-data.github.io/IPBES.R/, https://github.com/ipbes-data/IPBES.R
